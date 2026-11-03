@@ -27,7 +27,7 @@
         <label>Sync compatibility</label>
         <type>dropdown</type>
         <help>
-            Newer versions of OPNsense offer additional attributes in the state synchronization, for compatibility reasons you can optionally choose an older version here.
+            Newer versions of jk-ufw offer additional attributes in the state synchronization, for compatibility reasons you can optionally choose an older version here.
             Always make sure both nodes use the same version to avoid inconsistent state tables.
         </help>
     </field>

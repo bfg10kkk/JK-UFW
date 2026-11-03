@@ -1,0 +1,279 @@
+/* ==========================================================================
+   jk-ufw UI layer: icon rail, side-panel editors, switches, forms, login
+   Appended to main.css after the jk-ufw colour layer
+   ========================================================================== */
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/inter/InterVariable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+body { font-feature-settings: "cv11", "ss01"; letter-spacing: -.005em; }
+
+/* ---------- top bar height in sync with the side nav ---------- */
+.page-head .navbar { height: 56px; }
+.page-side { margin-top: 56px !important; height: calc(100% - 56px) !important; }
+.toggle-sidebar { margin-top: 18px !important; }
+
+/* ---------- icon rail (collapsed sidebar), UniFi style ---------- */
+main.page-content.col-lg-12 { padding-left: 86px; }
+#navigation.col-sidebar-left > div.row > nav.page-side-nav {
+  background: #0f0f12 !important; border-right: 1px solid var(--cr-border) !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item {
+  width: 50px !important; height: 50px !important; margin: 4px 10px !important; padding: 0 !important;
+  border: 0 !important; border-radius: 12px !important;
+  display: flex !important; align-items: center; justify-content: center;
+  font-size: 0 !important; /* hide the text label, icon only */
+  color: #9a9aa5 !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item > span.__iconspacer {
+  width: auto !important; height: auto !important; font-size: 19px !important; margin: 0 !important; color: inherit !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item:hover,
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item[aria-expanded="true"] {
+  background: var(--cr-hover) !important; color: #fff !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item.active-menu-title,
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item.active-menu-title.collapsed {
+  background: var(--cr-accent-bg) !important; color: var(--cr-accent-2) !important;
+  box-shadow: inset 0 0 0 1px rgba(229,32,46,.35);
+}
+/* fly-out panels next to the rail */
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in {
+  left: 74px !important; width: 230px !important; padding: 6px !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in > div.collapse.in { width: 100% !important; padding: 2px 0 !important; box-shadow: none !important; border: 0 !important; }
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in[data-jk-title]::before {
+  content: attr(data-jk-title); display: block; padding: 8px 12px 6px; color: var(--cr-muted);
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+}
+#navigation.col-sidebar-left #mainmenu .collapse .list-group-item {
+  margin: 1px 0 !important; padding: 8px 12px !important; border-radius: 8px !important; font-size: 13px !important; color: #c9c9d1 !important;
+}
+#navigation.col-sidebar-left #mainmenu .collapse .collapse .list-group-item { padding-left: 24px !important; font-size: 12.5px !important; }
+#navigation.col-sidebar-left #mainmenu .collapse .list-group-item.active { background: var(--cr-accent-bg) !important; color: #fff !important; box-shadow: inset 3px 0 0 var(--cr-accent); }
+
+/* ---------- page header ---------- */
+.page-content-head {
+  position: sticky; top: 56px; z-index: 20;
+  background: rgba(11,11,13,.85) !important; backdrop-filter: blur(10px);
+  margin-bottom: 8px; padding: 18px 0 12px !important; border-bottom: 1px solid transparent !important;
+}
+.page-content-head h1 { margin: 0 !important; }
+.page-content-head .btn-group-container .btn { margin-left: 4px; }
+.page-content-main { padding-top: 4px; }
+
+/* ---------- forms rendered as cards with clean rows ---------- */
+.opnsense_standard_table_form,
+form .table-responsive > table.table,
+.content-box table.table.opnsense_standard_table_form {
+  background: transparent !important;
+}
+.opnsense_standard_table_form > tbody > tr > td,
+form .table-responsive > table.table > tbody > tr > td {
+  background: transparent !important; border-top: 1px solid #1d1d22 !important; padding: 12px 16px !important; vertical-align: top !important;
+}
+.opnsense_standard_table_form > tbody > tr:first-child > td,
+form .table-responsive > table.table > tbody > tr:first-child > td { border-top: 0 !important; }
+.opnsense_standard_table_form > tbody > tr:nth-of-type(odd) > td,
+form .table-responsive > table.table-striped > tbody > tr:nth-of-type(odd) > td { background: transparent !important; }
+.opnsense_standard_table_form > tbody > tr:hover > td,
+form .table-responsive > table.table > tbody > tr:hover > td { background: rgba(255,255,255,.015) !important; }
+.control-label, .opnsense_standard_table_form td:first-child { color: #d6d6dc !important; }
+.control-label b, .opnsense_standard_table_form td:first-child b { font-weight: 500; }
+.control-label .fa-info-circle { color: #55555f !important; }
+.control-label a.showhelp .fa-info-circle { color: var(--cr-accent-2) !important; }
+form .table-responsive > table.table > thead > tr > th,
+.opnsense_standard_table_form > thead > tr > th,
+.opnsense_standard_table_form tr > td.listtopic,
+.opnsense_standard_table_form .listtopic {
+  background: transparent !important; color: #fff !important; text-transform: none !important; letter-spacing: 0 !important;
+  font-size: 15px !important; font-weight: 600 !important; padding: 16px 16px 8px !important; border-bottom: 1px solid var(--cr-border) !important;
+}
+form .table-responsive > table.table > thead .fa-angle-down,
+form .table-responsive > table.table > thead .fa-angle-right { color: var(--cr-accent-2); }
+form .table-responsive + .table-responsive { margin-top: 10px; }
+.help-block small, [data-for^="help_for_"] small { color: var(--cr-muted); font-size: 12px; line-height: 1.5; }
+.form-control::placeholder { color: #5b5b66; }
+select.form-control, .bootstrap-select > .dropdown-toggle { min-height: 34px; }
+textarea.form-control, textarea { border-radius: 8px !important; padding: 8px 12px; }
+.fa-toggle-off.text-danger { color: #5b5b66 !important; }
+.fa-toggle-on { color: var(--cr-accent-2) !important; }
+
+/* ---------- switches instead of checkboxes in settings forms ---------- */
+.opnsense_standard_table_form input[type="checkbox"],
+tr[id^="row_"] > td > input[type="checkbox"],
+.modal-body form input[type="checkbox"]:not(.select-box) {
+  -webkit-appearance: none; appearance: none; position: relative; cursor: pointer;
+  width: 38px; height: 22px; margin: 2px 8px 0 0; vertical-align: middle; flex: none;
+  border-radius: 999px; background: #2a2a31; border: 1px solid #34343c;
+  transition: background .18s, border-color .18s;
+}
+.opnsense_standard_table_form input[type="checkbox"]::before,
+tr[id^="row_"] > td > input[type="checkbox"]::before,
+.modal-body form input[type="checkbox"]:not(.select-box)::before {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: #c9c9d1; box-shadow: 0 1px 3px rgba(0,0,0,.5); transition: transform .18s, background .18s;
+}
+.opnsense_standard_table_form input[type="checkbox"]:checked,
+tr[id^="row_"] > td > input[type="checkbox"]:checked,
+.modal-body form input[type="checkbox"]:not(.select-box):checked { background: var(--cr-accent); border-color: var(--cr-accent); }
+.opnsense_standard_table_form input[type="checkbox"]:checked::before,
+tr[id^="row_"] > td > input[type="checkbox"]:checked::before,
+.modal-body form input[type="checkbox"]:not(.select-box):checked::before { transform: translateX(16px); background: #fff; }
+.opnsense_standard_table_form input[type="checkbox"]:focus-visible,
+tr[id^="row_"] > td > input[type="checkbox"]:focus-visible { box-shadow: 0 0 0 3px rgba(229,32,46,.3) !important; outline: 0; }
+.opnsense_standard_table_form input[type="checkbox"]:disabled,
+tr[id^="row_"] > td > input[type="checkbox"]:disabled { opacity: .45; cursor: not-allowed; }
+
+/* ---------- edit dialogs slide in from the right (side panel) ---------- */
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-dialog {
+  position: fixed; top: 56px; right: 0; bottom: 0; margin: 0 !important;
+  width: min(680px, 100vw) !important; max-width: 100vw; height: auto;
+}
+.modal.fade:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-dialog { transform: translateX(105%); transition: transform .28s cubic-bezier(.2,.8,.2,1); }
+.modal.in:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-dialog { transform: none; }
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-content {
+  height: 100%; display: flex; flex-direction: column;
+  border-radius: 16px 0 0 0 !important; border-right: 0 !important; border-bottom: 0 !important;
+  box-shadow: -30px 0 80px rgba(0,0,0,.6) !important;
+}
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-header { flex: none; padding: 18px 22px; }
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-header .modal-title { font-size: 18px; }
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-header .form-search { width: 200px !important; margin-top: -4px !important; }
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-body { flex: 1; overflow-y: auto; padding: 6px 8px 20px; }
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-footer {
+  flex: none; padding: 14px 22px; background: #111114; border-radius: 0;
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-footer .btn { min-width: 96px; height: 36px; }
+.modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-footer .btn + .btn { margin-left: 0; }
+/* stacked label / field / help layout inside the side panel */
+.modal-body .form-search-section > table,
+.modal-body .form-search-section > table > tbody,
+.modal-body .form-search-section > table > thead { display: block; width: 100% !important; table-layout: auto !important; }
+.modal-body .form-search-section > table > colgroup { display: none; }
+.modal-body .form-search-section > table > thead > tr { display: block; }
+.modal-body .form-search-section > table > thead > tr > th { display: block; }
+.modal-body .form-search-section > table > tbody > tr:not([id^="row_"]) { display: block; }
+.modal-body .form-search-section > table > tbody > tr:not([id^="row_"]) > td { display: block; }
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] { display: grid; grid-template-columns: 1fr; padding: 4px 14px; }
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] > td {
+  display: block; width: auto !important; padding: 4px 0 !important; border: 0 !important; background: transparent !important;
+}
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] { border-top: 1px solid #1d1d22; }
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] > td:first-child { padding-top: 10px !important; }
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] > td:last-child:empty,
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] > td:last-child .help-block:empty { display: none; }
+.modal-body .bootstrap-select:not(.bs-container), .modal-body .bootstrap-select > .dropdown-toggle { width: 100% !important; }
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] > td input.form-control,
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] > td textarea { width: 100% !important; }
+/* confirmation dialogs stay centred but match the style */
+.bootstrap-dialog .modal-dialog { margin-top: 12vh; }
+.bootstrap-dialog .modal-header { border-radius: 14px 14px 0 0; }
+.bootstrap-dialog.type-danger .modal-header, .bootstrap-dialog.type-warning .modal-header { box-shadow: inset 0 3px 0 var(--cr-accent); }
+
+/* ---------- grids: toolbars and row actions ---------- */
+.bootgrid-header { padding: 12px 14px !important; margin: 0 !important; }
+.bootgrid-header .actionBar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; }
+.bootgrid-header .search .input-group-addon { border-radius: 999px 0 0 999px !important; border-right: 0 !important; }
+.bootgrid-header .search .form-control { border-radius: 0 999px 999px 0 !important; border-left: 0 !important; }
+.tabulator-row .btn-xs, .bootgrid-table .btn-xs, td .btn-xs.btn-default {
+  background: transparent !important; border: 1px solid transparent !important; color: #9a9aa5 !important; width: 28px; height: 28px; padding: 0 !important;
+}
+.tabulator-row .btn-xs:hover, .bootgrid-table .btn-xs:hover, td .btn-xs.btn-default:hover { background: var(--cr-hover) !important; border-color: var(--cr-border-2) !important; color: #fff !important; }
+.tabulator-row .btn-xs.command-delete:hover, td .btn-xs.command-delete:hover { color: #ff4d57 !important; }
+.btn.command-add, .btn-primary.btn-xs { border-radius: 8px !important; }
+.tabulator .tabulator-tableholder { background: transparent !important; }
+.fa-play.text-success, .fa-check-square-o.text-success { color: var(--cr-ok) !important; }
+
+/* status pills in grids (enabled/disabled icons) */
+.command-toggle .fa-check-square-o, .command-toggle .fa-square-o { font-size: 15px; }
+
+/* ---------- apply-changes banner ---------- */
+#messageregion .alert, .alert.alert-info.apply-changes, .opnsense-apply-changes { border-radius: 10px !important; }
+
+/* ---------- login page ---------- */
+body.page-login {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(229,32,46,.22), transparent 60%),
+    radial-gradient(700px 400px at -10% 110%, rgba(229,32,46,.10), transparent 60%),
+    #0b0b0d !important;
+  display: flex; align-items: center; justify-content: center;
+}
+body.page-login > .container { width: 100%; max-width: 420px; padding: 0 16px; }
+.page-login .login-modal-container {
+  width: 100% !important; max-width: none !important; margin: 0 !important; float: none !important;
+  background: rgba(19,19,22,.92) !important; border: 1px solid var(--cr-border-2) !important; border-radius: 18px !important;
+  box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.02) inset !important; padding: 34px 32px 28px !important;
+  backdrop-filter: blur(12px);
+}
+.page-login .login-modal-head { height: auto !important; background: transparent !important; border: 0 !important; padding: 0 !important; margin-bottom: 18px; text-align: center; }
+.page-login .login-modal-head .navbar-brand { float: none; display: inline-block; height: auto; padding: 0; }
+.page-login .login-modal-head img { height: 44px !important; width: auto; }
+.page-login .login-modal-content { background: transparent !important; border: 0 !important; padding: 0 !important; }
+.page-login #inputerrors { text-align: center; min-height: 20px; color: #ff4d57 !important; }
+.page-login #inputerrors + br { display: none; }
+.page-login .form-group label { color: var(--cr-muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.page-login .form-control { height: 44px !important; font-size: 15px; border-radius: 10px !important; background: #0d0d10 !important; }
+.page-login .btn-primary { float: none !important; width: 100%; height: 44px; font-size: 15px; font-weight: 600; border-radius: 10px !important; margin-top: 6px; }
+.page-login .login-foot { margin-top: 18px; color: #55555e !important; font-size: 12px; background: transparent !important; border: 0 !important; }
+.page-login .login-foot a { color: #6b6b75 !important; }
+
+/* ---------- small screens ---------- */
+@media (max-width: 767px) {
+  .page-content-head { position: static; }
+  .modal:not(.bootstrap-dialog):not(#OPNsenseStdWaitDialog) .modal-content { border-radius: 0 !important; }
+}
+
+/* ---------- rail fixes (beat rebellion's long selectors) ---------- */
+#navigation.col-sidebar-left.page-side { border-right: 0 !important; box-shadow: none !important; background: transparent !important; }
+#navigation.col-sidebar-left > div.row > nav.page-side-nav,
+#navigation.col-sidebar-left #mainmenu, #navigation.col-sidebar-left #mainmenu > .panel {
+  border-radius: 0 !important; height: 100% !important; min-height: 100%;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item:not(.jk-x):hover,
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item:not(.jk-x):focus,
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item:not(.jk-x)[aria-expanded="true"] {
+  border: 0 !important; box-shadow: none !important; background: var(--cr-hover) !important; color: #fff !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > a.list-group-item.active-menu-title:not(.jk-x) {
+  background: var(--cr-accent-bg) !important; color: var(--cr-accent-2) !important; box-shadow: inset 0 0 0 1px rgba(229,32,46,.35) !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse > a.list-group-item:not(.jk-x),
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in > a.list-group-item:not(.jk-x),
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse > div.collapse > a.list-group-item:not(.jk-x),
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in > div.collapse.in > a.list-group-item:not(.jk-x) {
+  background: transparent !important; color: #c9c9d1 !important; border: 0 !important; box-shadow: none !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in > a.list-group-item:not(.jk-x):hover,
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in > div.collapse.in > a.list-group-item:not(.jk-x):hover,
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in > a.list-group-item:not(.jk-x)[aria-expanded="true"] {
+  background: var(--cr-hover) !important; color: #fff !important;
+}
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in > a.list-group-item.active:not(.jk-x),
+#navigation.col-sidebar-left > div > nav > #mainmenu > div > div.collapse.in > div.collapse.in > a.list-group-item.active:not(.jk-x) {
+  background: var(--cr-accent-bg) !important; color: #fff !important; box-shadow: inset 3px 0 0 var(--cr-accent) !important;
+}
+
+/* ---------- footer stays readable and never covers content ---------- */
+.page-foot { background: rgba(11,11,13,.92) !important; border-top: 1px solid var(--cr-border) !important; padding: 10px 0 !important; backdrop-filter: blur(8px); }
+.page-content-main { padding-bottom: 64px !important; }
+.control-label a.showhelp .fa-info-circle { color: #b33a42 !important; }
+#mainmenu a.list-group-item::before, #mainmenu a.list-group-item:hover::before { display: none !important; }
+
+/* tabulator: frozen columns and selection column blend with the card */
+.tabulator-row .tabulator-cell.tabulator-frozen,
+.tabulator-row .tabulator-cell.tabulator-row-header,
+.tabulator .tabulator-header .tabulator-col.tabulator-frozen,
+.tabulator .tabulator-header .tabulator-col.tabulator-row-header { background: #131316 !important; border-color: #232329 !important; }
+.tabulator-row:hover .tabulator-cell.tabulator-frozen, .tabulator-row:hover .tabulator-cell.tabulator-row-header { background: #1e1e23 !important; }
+.tabulator-row.tabulator-selected .tabulator-cell.tabulator-frozen, .tabulator-row.tabulator-selected .tabulator-cell.tabulator-row-header { background: #2a1417 !important; }
+.tabulator .tabulator-frozen.tabulator-frozen-right { border-left: 1px solid #232329 !important; }
+body.page-login > .container { min-height: 0 !important; margin: 0 auto !important; }
+.page-login .login-modal-head .navbar-brand { margin: 0 !important; }
+.modal-body .form-search-section > table > tbody > tr[id^="row_"] > td input.form-control:not([type="checkbox"]) { width: 100% !important; max-width: none !important; }
+.tabulator .tabulator-row { border-bottom: 1px solid #1f1f25 !important; }

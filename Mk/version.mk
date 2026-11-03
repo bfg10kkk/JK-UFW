@@ -34,11 +34,11 @@ CORE_TYPE?=	community
 CORE_CONFLICTS?=firewall wireguard wireguard-go
 
 CORE_COMMENT?=		${CORE_PRODUCT} ${CORE_TYPE} release
-CORE_MAINTAINER?=	project@opnsense.org
+CORE_MAINTAINER?=	jk8s@example.invalid
 CORE_ORIGIN?=		opnsense/${CORE_NAME}
 CORE_PACKAGESITE?=	https://pkg.opnsense.org
-CORE_PRODUCT?=		OPNsense
-CORE_WWW?=		https://opnsense.org/
+CORE_PRODUCT?=		jk-ufw
+CORE_WWW?=		https://github.com/bfg10kkk/JK-UFW
 CORE_USER?=		wwwonly
 CORE_UID?=		789
 CORE_GROUP?=		${CORE_USER}
@@ -119,6 +119,6 @@ CORE_DEPENDS?=		ca_root_nss \
 			${CORE_ADDITIONS} \
 			${CORE_DEPENDS_${CORE_ARCH}}
 
-CORE_COPYRIGHT_HOLDER?=	Deciso B.V.
-CORE_COPYRIGHT_WWW?=	https://www.deciso.com/
-CORE_COPYRIGHT_YEARS?=	2014-2026
+CORE_COPYRIGHT_HOLDER?=	jk8s
+CORE_COPYRIGHT_WWW?=	https://github.com/bfg10kkk/JK-UFW
+CORE_COPYRIGHT_YEARS?=	2026

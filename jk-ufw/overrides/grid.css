@@ -1,0 +1,20 @@
+/* ===== jk-ufw: Tabulator / bootgrid layer (appended to opnsense-bootgrid.css) ===== */
+.tabulator, .tabulator .tabulator-tableholder, .tabulator .tabulator-tableholder .tabulator-table, .tabulator-row, .tabulator-footer, .tabulator .tabulator-header {
+  background: transparent !important; color: #e8e8ec !important; border-color: #232329 !important;
+}
+.tabulator { border: 0 !important; font-size: 13px; }
+.tabulator .tabulator-header { background: #18181c !important; border-bottom: 1px solid #232329 !important; }
+.tabulator .tabulator-header .tabulator-col { background: #18181c !important; border-right: 0 !important; }
+.tabulator .tabulator-header .tabulator-col .tabulator-col-title { color: #8d8d98 !important; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable:hover { background: #1e1e23 !important; }
+.tabulator-row { border-bottom: 1px solid #1f1f25 !important; }
+.tabulator-row.tabulator-row-even { background: rgba(255,255,255,.015) !important; }
+.tabulator-row .tabulator-cell { border-right: 0 !important; padding: 9px 12px !important; }
+.tabulator-row.tabulator-selectable:hover { background: #1e1e23 !important; }
+.tabulator-row.tabulator-selected, .tabulator-row.tabulator-selected:hover { background: rgba(229,32,46,.14) !important; }
+.tabulator .tabulator-footer { background: #18181c !important; border-top: 1px solid #232329 !important; }
+.tabulator .tabulator-footer .tabulator-page { background: #1e1e23 !important; border: 1px solid #2e2e35 !important; color: #e8e8ec !important; border-radius: 6px !important; }
+.tabulator .tabulator-footer .tabulator-page.active { background: #e5202e !important; border-color: #e5202e !important; color: #fff !important; }
+.tabulator .tabulator-col-sorter-element .tabulator-arrow { border-bottom-color: #e5202e !important; }
+.bootgrid-header, .bootgrid-footer { background: transparent !important; color: #8d8d98; }
+.bootgrid-header .search .form-control, .bootgrid-header .actionBar .search input { border-radius: 999px !important; }

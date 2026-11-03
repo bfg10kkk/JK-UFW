@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <opnsense>
   <trigger_initial_wizard/>
-  <theme>opnsense</theme>
+  <theme>jkufw</theme>
   <system>
     <optimization>normal</optimization>
-    <hostname>OPNsense</hostname>
+    <hostname>jk-ufw</hostname>
     <domain>internal</domain>
     <dnsallowoverride>1</dnsallowoverride>
     <dnsallowoverride_exclude/>

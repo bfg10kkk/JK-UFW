@@ -85,17 +85,16 @@ class DashboardController extends ApiControllerBase
         return [
             'options' => [],
             'widgets' => [
-                ['id' => 'systeminformation', 'x' => 0, 'y' => 0, 'w' => 2],
-                ['id' => 'memory', 'x' => 2, 'y' => 0],
-                ['id' => 'disk', 'x' => 3, 'y' => 0],
-                ['id' => 'interfacestatistics', 'x' => 4, 'y' => 0, 'w' => 4],
-                ['id' => 'firewall', 'x' => 8, 'y' => 0, 'w' => 4],
-                ['id' => 'gateways', 'x' => 2, 'y' => 1, 'w' => 2],
-                ['id' => 'interfaces', 'x' => 4, 'y' => 1, 'w' => 4],
-                ['id' => 'services', 'x' => 4, 'y' => 2, 'w' => '4'],
-                ['id' => 'traffic', 'x' => 8, 'y' => 1, 'w' => 4],
-                ['id' => 'cpu', 'x' => 0, 'y' => 1, 'w' => 2],
-                ['id' => 'announcements', 'x' => 2, 'y' => 2, 'w' => 2],
+                ['id' => 'jkufwoverview', 'x' => 0, 'y' => 0, 'w' => 12],
+                ['id' => 'jkufwinternet', 'x' => 0, 'y' => 1, 'w' => 4],
+                ['id' => 'jkufwsecurity', 'x' => 4, 'y' => 1, 'w' => 8],
+                ['id' => 'jkufwports', 'x' => 0, 'y' => 2, 'w' => 8],
+                ['id' => 'jkufwsystem', 'x' => 8, 'y' => 2, 'w' => 4],
+                ['id' => 'jkufwtraffic', 'x' => 0, 'y' => 3, 'w' => 8],
+                ['id' => 'jkufwclients', 'x' => 8, 'y' => 3, 'w' => 4],
+                ['id' => 'jkufwdns', 'x' => 0, 'y' => 4, 'w' => 8],
+                ['id' => 'jkufwvpn', 'x' => 8, 'y' => 4, 'w' => 4],
+                ['id' => 'jkufwservices', 'x' => 0, 'y' => 5, 'w' => 12],
             ]
         ];
     }

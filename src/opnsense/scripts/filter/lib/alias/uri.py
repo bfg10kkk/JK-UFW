@@ -62,7 +62,7 @@ class UriParser(BaseContentParser):
             :return: iterator
         """
         # set request parameters
-        req_opts = {'url': url, 'stream': True, 'timeout': self._timeout, 'headers': {'User-Agent': 'OPNsense'}}
+        req_opts = {'url': url, 'stream': True, 'timeout': self._timeout, 'headers': {'User-Agent': 'jk-ufw'}}
         if self._ssl_no_verify:
             req_opts['verify'] = False
 

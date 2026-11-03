@@ -13,7 +13,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>{{headTitle|default("OPNsense") }} | {{system_hostname}}.{{system_domain}}</title>
+    <title>{{headTitle|default("jk-ufw") }} | {{system_hostname}}.{{system_domain}}</title>
     {% set theme_name = ui_theme|default('opnsense') %}
 
     <!-- Favicon -->

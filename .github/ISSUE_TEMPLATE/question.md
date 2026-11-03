@@ -1,21 +1,11 @@
 ---
-name: Question
-about: Ask a question about OPNsense, but before you do, please consider using our forum
-title: ''
-labels: support
-assignees: ''
+name: Вопрос
+about: Задать вопрос о настройке jk-ufw
+labels: question
 ---
-**Important notices**
 
-Our forum is located at https://forum.opnsense.org , please consider joining discussions there instead of using GitHub for these matters.
+**Вопрос**
 
-Before you ask a new question, we ask you kindly to acknowledge the following:
+**Что уже пробовали**
 
-- [ ] I have read the contributing guidelines at https://github.com/opnsense/core/blob/master/CONTRIBUTING.md
-- [ ] I am convinced that my issue is new after having checked both open and closed issues at https://github.com/opnsense/core/issues?q=is%3Aissue
-- [ ] AI tools were used to create at least part of the text submitted herewith.
-
-If AI was used, please disclose:
-
-- Model used:
-- Extent of AI involvement:
+**Версия jk-ufw**

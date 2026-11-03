@@ -1,4 +1,4 @@
-<p>OPNsense %%CORE_SERIES%% "<em>%%CORE_NICKNAME%%</em>" has reached its end
+<p>%%CORE_PRODUCT%% %%CORE_SERIES%% "<em>%%CORE_NICKNAME%%</em>" has reached its end
 of life. As such it will not receive any more updates, but the upgrade to the
 new %%CORE_NEXT%% series is seamless and can be performed right here from the
 web GUI.</p>
@@ -12,5 +12,5 @@ typing "%%UPGRADE_RELEASE%%" when prompted.</p>
 <p>Please backup your configuration, preview the new version via live image or
 in a virtual machine. If applicable, create VM snapshots or use the built-in
 snapshot feature available on ZFS installations. If all else fails, report back
-<a href="https://forum.opnsense.org/" target="_blank">in the forums</a> for
+<a href="https://github.com/bfg10kkk/JK-UFW" target="_blank">on the project page</a> for
 assistance.</p>

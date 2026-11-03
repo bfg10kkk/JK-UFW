@@ -67,7 +67,7 @@ function upload_crash_report($files, $agent)
     }
 
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, 'https://crash.opnsense.org/');
+    curl_setopt($ch, CURLOPT_URL, '');
     curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_VERBOSE, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -107,7 +107,7 @@ if (isset($_SERVER['HTTP_USER_AGENT'])) {
 $user_agent = "{$product->name()}/{$product->version()}";
 $crash_reports = [];
 $has_crashed = false;
-$is_prod = empty($config['system']['deployment']);
+$is_prod = false; /* no crash report server configured (CRASHURL) */
 
 $pconfig = array();
 $pconfig['Email'] = isset($config['system']['contact_email']) ? $config['system']['contact_email'] : '';
@@ -223,7 +223,7 @@ if ($has_crashed) {
     if ($is_prod) {
         $message = gettext('An issue was detected.');
     } else {
-        $message = gettext('Development deployment is configured so crash reports cannot be sent.');
+        $message = gettext('An issue was detected. Copy the report below into a new issue on the project page.');
     }
 }
 

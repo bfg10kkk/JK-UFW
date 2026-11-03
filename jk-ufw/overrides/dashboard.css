@@ -1,0 +1,14 @@
+/* ===== jk-ufw: dashboard layer (appended to dashboard.css) ===== */
+.grid-stack-item-content {
+  background: #131316 !important; border: 1px solid #232329 !important; border-radius: 12px !important;
+  box-shadow: 0 6px 24px rgba(0,0,0,.35) !important; color: #e8e8ec;
+}
+.widget-header { background: transparent !important; border-bottom: 1px solid #232329 !important; padding: 10px 14px !important; }
+.widget-title, .widget-header b, .widget-header strong { color: #fff !important; font-weight: 600; letter-spacing: .01em; }
+.widget-content { background: transparent !important; }
+.link-handle > a, .close-handle > i, .edit-handle > i, .clone-handle > i { color: #8d8d98 !important; }
+.link-handle > a:hover, .close-handle > i:hover, .edit-handle > i:hover, .clone-handle > i:hover { color: #ff3b47 !important; }
+.panel-divider { border-color: #232329 !important; }
+.grid-stack > .grid-stack-placeholder > .placeholder-content { border: 2px dashed rgba(229,32,46,.6) !important; background: rgba(229,32,46,.05) !important; border-radius: 12px; }
+.ui-resizable-handle { filter: invert(1) opacity(.4); }
+.smoothie-chart-tooltip { background: #17171b !important; color: #fff !important; border: 1px solid #2e2e35 !important; border-radius: 6px; }

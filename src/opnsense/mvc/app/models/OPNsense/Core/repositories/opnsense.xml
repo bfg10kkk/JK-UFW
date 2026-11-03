@@ -70,7 +70,7 @@
         </mirror>
         <mirror>
             <url>https://pkg.opnsense.org</url>
-            <description>OPNsense (HTTPS, Amsterdam, NL)</description>
+            <description>Default (HTTPS, Amsterdam, NL)</description>
         </mirror>
         <mirror>
             <url>https://www.mirrorservice.org/sites/opnsense.org</url>

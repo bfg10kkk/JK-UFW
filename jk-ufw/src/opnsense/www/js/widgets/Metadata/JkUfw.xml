@@ -1,0 +1,218 @@
+<metadata>
+    <jkufwoverview>
+        <filename>JkUfwOverview.js</filename>
+        <endpoints>
+            <endpoint>/api/diagnostics/traffic/*</endpoint>
+            <endpoint>/api/diagnostics/cpu_usage/*</endpoint>
+            <endpoint>/api/diagnostics/system/*</endpoint>
+            <endpoint>/api/diagnostics/interface/get_arp</endpoint>
+            <endpoint>/api/diagnostics/firewall/pf_states</endpoint>
+            <endpoint>/api/routing/settings/search_gateway</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Обзор сети</title>
+            <wan_interface>WAN-интерфейс</wan_interface>
+            <internet>Интернет</internet>
+            <download>Загрузка</download>
+            <upload>Отдача</upload>
+            <clients>Клиенты</clients>
+            <memory>Память</memory>
+            <states>Сессии</states>
+            <uptime>Аптайм</uptime>
+            <online>Online</online>
+            <offline>Offline</offline>
+            <loss>потери</loss>
+            <no_gateway>Шлюз не настроен</no_gateway>
+        </translations>
+    </jkufwoverview>
+    <jkufwtraffic>
+        <filename>JkUfwTraffic.js</filename>
+        <link>/ui/diagnostics/traffic</link>
+        <multiple/>
+        <endpoints>
+            <endpoint>/api/diagnostics/traffic/*</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Трафик</title>
+            <interface>Интерфейс</interface>
+            <window>Окно графика</window>
+            <download>Загрузка</download>
+            <upload>Отдача</upload>
+            <peak>Пик</peak>
+            <now>сейчас</now>
+        </translations>
+    </jkufwtraffic>
+    <jkufwclients>
+        <filename>JkUfwClients.js</filename>
+        <link>/ui/diagnostics/interface/arp</link>
+        <endpoints>
+            <endpoint>/api/diagnostics/interface/get_arp</endpoint>
+            <endpoint>/api/diagnostics/traffic/*</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Устройства</title>
+            <limit>Сколько строк показывать</limit>
+            <live>Показывать трафик устройств</live>
+            <devices>устройств</devices>
+            <loading>Загрузка…</loading>
+            <unavailable>Данные недоступны</unavailable>
+            <none>Устройства не найдены</none>
+        </translations>
+    </jkufwclients>
+    <jkufwinternet>
+        <filename>JkUfwInternet.js</filename>
+        <link>/ui/routing/configuration</link>
+        <endpoints>
+            <endpoint>/api/routing/settings/search_gateway</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Интернет</title>
+            <loading>Загрузка…</loading>
+            <none>Шлюзы не настроены</none>
+            <active>основной</active>
+            <rtt>Задержка</rtt>
+            <jitter>Джиттер</jitter>
+            <loss>Потери</loss>
+            <availability>Доступность</availability>
+            <history>История связи</history>
+            <min_ago>мин назад</min_ago>
+            <now>сейчас</now>
+        </translations>
+    </jkufwinternet>
+    <jkufwsecurity>
+        <filename>JkUfwSecurity.js</filename>
+        <link>/ui/diagnostics/firewall/log</link>
+        <endpoints>
+            <endpoint>/api/diagnostics/firewall/log</endpoint>
+            <endpoint>/api/diagnostics/interface/get_interface_names</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Защита</title>
+            <window>Период</window>
+            <minutes>мин</minutes>
+            <hours>ч</hours>
+            <blocked>Заблокировано</blocked>
+            <blocked_lc>заблокировано</blocked_lc>
+            <passed>Пропущено</passed>
+            <sources>Источники</sources>
+            <top_port>Главная цель</top_port>
+            <per_minute>События по минутам</per_minute>
+            <top_sources>Кого блокируем чаще всего</top_sources>
+            <top_ports>Куда стучатся</top_ports>
+            <open_log>Журнал</open_log>
+            <port>Порт</port>
+            <of_events>событий</of_events>
+            <for>за</for>
+            <now>сейчас</now>
+            <nothing>Ничего не заблокировано</nothing>
+            <unavailable>Журнал недоступен</unavailable>
+            <note>Учитываются только правила с включённым логированием (правило блокировки по умолчанию логируется).</note>
+        </translations>
+    </jkufwsecurity>
+    <jkufwdns>
+        <filename>JkUfwDns.js</filename>
+        <link>/ui/unbound/overview</link>
+        <endpoints>
+            <endpoint>/api/unbound/overview/*</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: DNS</title>
+            <period>Период графика</period>
+            <hour>ч</hour>
+            <rows>Строк в списках</rows>
+            <queries>Запросы</queries>
+            <queries_lc>запросов</queries_lc>
+            <blocked>Заблокировано</blocked>
+            <local>Кэш и локальные</local>
+            <fast>отвечено сразу</fast>
+            <resolved>Внешние</resolved>
+            <since>с</since>
+            <activity>Активность</activity>
+            <allowed>Разрешено</allowed>
+            <top>Популярные домены</top>
+            <top_blocked>Чаще всего блокируются</top_blocked>
+            <details>Подробно</details>
+            <no_data>Пока нет данных</no_data>
+            <nothing>Ничего не заблокировано</nothing>
+            <disabled>Статистика DNS выключена.</disabled>
+            <enable>Включите её на странице отчётов DNS</enable>
+        </translations>
+    </jkufwdns>
+    <jkufwsystem>
+        <filename>JkUfwSystem.js</filename>
+        <link>/ui/core/firmware</link>
+        <endpoints>
+            <endpoint>/api/diagnostics/system/*</endpoint>
+            <endpoint>/api/diagnostics/cpu_usage/*</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Система</title>
+            <memory>Память</memory>
+            <disk>Диск</disk>
+            <temperature>Температура</temperature>
+            <sensors>датчиков</sensors>
+            <no_sensors>нет датчиков</no_sensors>
+            <storage>Хранилище</storage>
+            <details>Подробности</details>
+            <updates>Проверить обновления</updates>
+            <uptime>Работает</uptime>
+            <cpu>Процессор</cpu>
+            <load>Нагрузка (1/5/15 мин)</load>
+            <component>Компонент</component>
+            <config>Конфигурация изменена</config>
+        </translations>
+    </jkufwsystem>
+    <jkufwports>
+        <filename>JkUfwPorts.js</filename>
+        <link>/ui/interfaces/overview</link>
+        <endpoints>
+            <endpoint>/api/interfaces/overview/*</endpoint>
+            <endpoint>/api/diagnostics/traffic/*</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Порты</title>
+            <loading>Загрузка…</loading>
+            <none>Нет интерфейсов</none>
+            <no_link>нет линка</no_link>
+            <device>Устройство</device>
+            <status>Состояние</status>
+            <up>подключён</up>
+            <down>отключён</down>
+            <media>Линк</media>
+            <addressing>Адресация</addressing>
+            <static>Статическая</static>
+        </translations>
+    </jkufwports>
+    <jkufwservices>
+        <filename>JkUfwServices.js</filename>
+        <link>/ui/core/service</link>
+        <endpoints>
+            <endpoint>/api/core/service/*</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Службы</title>
+            <all>Все</all>
+            <stopped>Остановлены</stopped>
+            <all_running>все работают</all_running>
+            <none_stopped>Все службы работают</none_stopped>
+            <restart>Перезапустить</restart>
+            <start>Запустить</start>
+        </translations>
+    </jkufwservices>
+    <jkufwvpn>
+        <filename>JkUfwVpn.js</filename>
+        <link>/ui/wireguard/diagnostics</link>
+        <endpoints>
+            <endpoint>/api/wireguard/service/show</endpoint>
+            <endpoint>/api/openvpn/service/search_sessions</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: VPN</title>
+            <show_offline>Показывать неактивных</show_offline>
+            <online_of>на связи из</online_of>
+            <never>не подключался</never>
+            <none>VPN не настроен</none>
+            <nobody>Сейчас никто не подключён</nobody>
+        </translations>
+    </jkufwvpn>
+</metadata>

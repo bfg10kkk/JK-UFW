@@ -391,8 +391,8 @@ $( document ).ready(function() {
 <?php
                 foreach (glob('/usr/local/opnsense/www/themes/*', GLOB_ONLYDIR) as $file):
                   $file = basename($file);?>
-                  <option <?= $file == $pconfig['theme'] ? 'selected="selected"' : '' ?>>
-                    <?=$file;?>
+                  <option value="<?= htmlspecialchars($file) ?>" <?= $file == $pconfig['theme'] ? 'selected="selected"' : '' ?>>
+                    <?= htmlspecialchars(['jkufw' => 'jk-ufw', 'opnsense' => 'jk-ufw classic', 'opnsense-dark' => 'jk-ufw classic dark'][$file] ?? $file) ?>
                   </option>
 <?php
                 endforeach; ?>

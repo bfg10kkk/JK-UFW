@@ -11,6 +11,7 @@
 ```sh
 pkg install -y git
 git clone -b stable/26.7 https://github.com/bfg10kkk/JK-UFW.git /usr/core   # этот репозиторий
+git -C /usr/core fetch https://github.com/opnsense/core.git 'refs/tags/26.7*:refs/tags/26.7*'   # метки версий
 git clone https://github.com/opnsense/tools /usr/tools                       # сборочные инструменты
 cd /usr/tools
 make update                         # скачает src, ports, plugins; /usr/core уже ваш и останется вашим
@@ -20,6 +21,8 @@ make dvd                            # или vm / serial / vga
 make print-IMAGESDIR                # где лежит готовый образ
 ```
 
+- Метки версий (`26.7.x`) нужны, чтобы сборка вычислила номер версии; без них `make` остановится с ошибкой
+  «Did not find appropriate tag». Если метки уже есть в этом репозитории, вторая строка просто ничего не скачает.
 - `make core-opnsense` обязателен: в скачанном наборе пакетов core уже помечен как собранный, и без этой
   команды в образ попадёт не переименованный core. Имя цели менять нельзя, это внутреннее имя пакета.
 - Не передавайте `NAME=jk-ufw`: от него зависит имя главного пакета, и сборка его не найдёт.
@@ -34,6 +37,7 @@ make print-IMAGESDIR                # где лежит готовый обра�
 ```sh
 pkg install -y git
 git clone -b stable/26.7 https://github.com/bfg10kkk/JK-UFW.git /root/jk-ufw
+git -C /root/jk-ufw fetch https://github.com/opnsense/core.git 'refs/tags/26.7*:refs/tags/26.7*'
 cd /root/jk-ufw && make upgrade     # собрать пакет из репозитория и сразу установить
 ```
 

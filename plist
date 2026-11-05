@@ -329,6 +329,7 @@
 /usr/local/opnsense/mvc/app/controllers/OPNsense/IDS/Api/SettingsController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/IDS/IndexController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/IDS/PolicyController.php
+/usr/local/opnsense/mvc/app/controllers/OPNsense/IDS/ThreatsController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/IDS/forms/dialogPolicy.xml
 /usr/local/opnsense/mvc/app/controllers/OPNsense/IDS/forms/dialogPolicyRule.xml
 /usr/local/opnsense/mvc/app/controllers/OPNsense/IDS/forms/dialogRule.xml
@@ -878,6 +879,7 @@
 /usr/local/opnsense/mvc/app/models/OPNsense/Interfaces/VxLan.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/Interfaces/Wlan.php
 /usr/local/opnsense/mvc/app/models/OPNsense/Interfaces/Wlan.xml
+/usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Menu/Menu.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/Kea/ACL/ACL.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/Kea/FieldTypes/KeaClasslessStaticRouteField.php
 /usr/local/opnsense/mvc/app/models/OPNsense/Kea/FieldTypes/KeaOptionDataField.php
@@ -1028,6 +1030,7 @@
 /usr/local/opnsense/mvc/app/views/OPNsense/Hostdiscovery/settings.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/IDS/index.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/IDS/policy.volt
+/usr/local/opnsense/mvc/app/views/OPNsense/IDS/threats.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/IPsec/connections.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/IPsec/key_pairs.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/IPsec/leases.volt
@@ -2309,6 +2312,7 @@
 /usr/local/opnsense/www/js/widgets/JkUfwSecurity.js
 /usr/local/opnsense/www/js/widgets/JkUfwServices.js
 /usr/local/opnsense/www/js/widgets/JkUfwSystem.js
+/usr/local/opnsense/www/js/widgets/JkUfwThreats.js
 /usr/local/opnsense/www/js/widgets/JkUfwTraffic.js
 /usr/local/opnsense/www/js/widgets/JkUfwVpn.js
 /usr/local/opnsense/www/js/widgets/KeaLeases.js

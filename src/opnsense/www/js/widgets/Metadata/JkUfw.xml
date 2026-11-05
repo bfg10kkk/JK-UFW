@@ -215,4 +215,36 @@
             <nobody>Сейчас никто не подключён</nobody>
         </translations>
     </jkufwvpn>
+    <jkufwthreats>
+        <filename>JkUfwThreats.js</filename>
+        <link>/ui/ids/threats</link>
+        <endpoints>
+            <endpoint>/api/ids/service/status</endpoint>
+            <endpoint>/api/ids/service/query_alerts</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Защита от угроз (IPS)</title>
+            <window>Период</window>
+            <hours>ч</hours>
+            <protection>Защита</protection>
+            <detected>Обнаружено</detected>
+            <detected_only>Только замечено</detected_only>
+            <blocked>Заблокировано</blocked>
+            <sources>Атакующие</sources>
+            <timeline>Угрозы по времени</timeline>
+            <top_signatures>Частые угрозы</top_signatures>
+            <top_sources>Кто атакует</top_sources>
+            <settings>Настройки</settings>
+            <on>Включена</on>
+            <off>Выключена</off>
+            <running>Suricata работает</running>
+            <enable>Включить</enable>
+            <for>за</for>
+            <of_threats>угроз</of_threats>
+            <clean>всё чисто</clean>
+            <now>сейчас</now>
+            <disabled>Защита от вторжений выключена</disabled>
+            <nothing>Угроз не найдено</nothing>
+        </translations>
+    </jkufwthreats>
 </metadata>

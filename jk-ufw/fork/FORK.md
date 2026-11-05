@@ -77,3 +77,26 @@ System › Firmware › Reporter, чтобы их можно было прило
 Пока нет своего сервера пакетов, система берёт обновления с зеркала основного проекта, и обновление пакета
 core вернёт старое название в интерфейсе. Поэтому обновляйтесь пересборкой (раздел 1 или 2) или поднимите
 свой сервер пакетов со своим ключом подписи и укажите его в `PKGSITE`.
+
+## 6. Защита от угроз (IDS/IPS)
+
+Страница **Services › Intrusion Detection › Threat Management** (`/ui/ids/threats`) и виджет дашборда
+«jk-ufw: Защита от угроз (IPS)». Это надстройка над встроенным Suricata: режим (выкл / IDS / IPS), интерфейсы,
+уровень защиты и категории правил ET open и abuse.ch на одном экране. Режим IPS включает netmap и одну политику
+`jk-ufw: block threats`, которая переводит все сработавшие правила включённых наборов из «alert» в «drop».
+Старая страница с полными настройками осталась на месте, кнопка «Расширенные».
+
+Файлы: `src/opnsense/mvc/app/controllers/OPNsense/IDS/ThreatsController.php`,
+`src/opnsense/mvc/app/views/OPNsense/IDS/threats.volt`, `src/opnsense/mvc/app/models/OPNsense/JkUfw/Menu/Menu.xml`
+(пункт меню в отдельном файле, чтобы не конфликтовать с основным проектом), `src/opnsense/www/js/widgets/JkUfwThreats.js`.
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-ids.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-ids.sh
+sh /tmp/try-ids.sh                 # или: sh /tmp/try-ids.sh <ветка>
+sh /tmp/try-ids.sh --remove        # убрать
+```
+
+Для IPS отключите аппаратную разгрузку (Interfaces › Settings: CRC, TSO, LRO) и перезагрузитесь. В VirtualBox
+подходят адаптеры Intel PRO/1000 и virtio-net.

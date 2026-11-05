@@ -1,0 +1,8 @@
+<menu>
+    <!-- jk-ufw additions, kept in their own file so upstream menu changes merge cleanly -->
+    <Services>
+        <IDS>
+            <Threats VisibleName="Threat Management" order="5" url="/ui/ids/threats"/>
+        </IDS>
+    </Services>
+</menu>

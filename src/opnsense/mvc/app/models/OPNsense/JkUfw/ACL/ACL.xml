@@ -1,0 +1,9 @@
+<acl>
+    <!-- jk-ufw pages; the APIs they call keep their own ACLs -->
+    <page-jkufw-devices>
+        <name>Lobby: Devices</name>
+        <patterns>
+            <pattern>ui/jkufw/devices</pattern>
+        </patterns>
+    </page-jkufw-devices>
+</acl>

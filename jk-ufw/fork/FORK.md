@@ -77,3 +77,29 @@ System › Firmware › Reporter, чтобы их можно было прило
 Пока нет своего сервера пакетов, система берёт обновления с зеркала основного проекта, и обновление пакета
 core вернёт старое название в интерфейсе. Поэтому обновляйтесь пересборкой (раздел 1 или 2) или поднимите
 свой сервер пакетов со своим ключом подписи и укажите его в `PKGSITE`.
+
+## 7. Устройства в сети
+
+Страница **Lobby › Devices** (`/ui/jkufw/devices`), в стиле раздела Clients из UniFi. Список собирается из таблиц
+ARP и NDP, аренд Kea и Dnsmasq и Host Discovery (если включён): имя, производитель по MAC, адреса, сеть, аренда,
+когда устройство впервые и последний раз замечено. Скорость скачивания и отдачи по каждому устройству берётся из
+iftop на локальных интерфейсах раз в 10 секунд. Виджет дашборда «jk-ufw: Устройства» ведёт на эту страницу.
+
+В один клик:
+- **Заблокировать.** MAC и текущие IP устройства попадают в псевдонимы `jkufw_block_mac` и `jkufw_block_ip`,
+  одно плавающее правило `jk-ufw: blocked devices` (создаётся при первой блокировке) закрывает им всё, кроме
+  обращений к самому экрану (DNS, DHCP, веб-интерфейс). Открытые соединения устройства сбрасываются.
+- **Ограничить скорость.** Для устройства создаются два канала шейпера `jk-ufw limit <MAC> down|up` и два правила
+  на его локальном интерфейсе. Если устройство потом получит другой IP, нажмите «Изменить», чтобы обновить правила.
+
+Файлы: `src/opnsense/mvc/app/controllers/OPNsense/JkUfw/DevicesController.php`,
+`src/opnsense/mvc/app/views/OPNsense/JkUfw/devices.volt`, `src/opnsense/mvc/app/models/OPNsense/JkUfw/ACL/ACL.xml`,
+`src/opnsense/mvc/app/models/OPNsense/JkUfw/Menu/Menu.xml`.
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-devices.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-devices.sh
+sh /tmp/try-devices.sh                 # или: sh /tmp/try-devices.sh <ветка>
+sh /tmp/try-devices.sh --remove        # убрать
+```

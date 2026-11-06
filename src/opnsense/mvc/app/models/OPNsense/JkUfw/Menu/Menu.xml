@@ -1,0 +1,6 @@
+<menu>
+    <!-- jk-ufw additions, kept in their own file so upstream menu changes merge cleanly -->
+    <Firewall>
+        <ContentFilter VisibleName="Content Filter" order="45" url="/ui/jkufw/parental" cssClass="fa fa-child fa-fw"/>
+    </Firewall>
+</menu>

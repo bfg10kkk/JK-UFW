@@ -1,0 +1,10 @@
+<acl>
+    <!-- jk-ufw additions -->
+    <page-jkufw-parental>
+        <name>Firewall: Content Filter and Parental Control</name>
+        <patterns>
+            <pattern>ui/jkufw/parental</pattern>
+            <pattern>api/jkufw/parental/*</pattern>
+        </patterns>
+    </page-jkufw-parental>
+</acl>

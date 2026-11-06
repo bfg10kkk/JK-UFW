@@ -1,0 +1,64 @@
+<model>
+    <mount>//OPNsense/JkUfw/parental</mount>
+    <version>1.0.0</version>
+    <description>jk-ufw parental control: internet schedules per device</description>
+    <items>
+        <general>
+            <!-- reject DNS (53) and DNS over TLS (853) to anything but this firewall, so DNS filtering cannot be bypassed -->
+            <block_foreign_dns type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </block_foreign_dns>
+        </general>
+        <devices>
+            <device type="ArrayField">
+                <enabled type="BooleanField">
+                    <Default>1</Default>
+                    <Required>Y</Required>
+                </enabled>
+                <name type="TextField">
+                    <Required>Y</Required>
+                    <Mask>/^[^\r\n,]{1,64}$/u</Mask>
+                    <ValidationMessage>Name should be 1 to 64 characters, without commas.</ValidationMessage>
+                </name>
+                <!-- IPv4/IPv6 addresses or MAC addresses, not mixed (checked in Parental.php) -->
+                <addresses type="CSVListField">
+                    <Required>Y</Required>
+                    <Mask>/^([0-9]{1,3}(\.[0-9]{1,3}){3}|[0-9a-fA-F:]*:[0-9a-fA-F:.]+|([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})$/</Mask>
+                    <MaskPerItem>Y</MaskPerItem>
+                    <ValidationMessage>Enter IP or MAC addresses, separated by commas.</ValidationMessage>
+                </addresses>
+                <!-- block right now, regardless of the schedule -->
+                <paused type="BooleanField">
+                    <Default>0</Default>
+                    <Required>Y</Required>
+                </paused>
+                <!-- days on which the block starts at block_from (ISO weekday numbers, 1 = Monday) -->
+                <days type="OptionField">
+                    <Multiple>Y</Multiple>
+                    <OptionValues>
+                        <d1 value="1">Monday</d1>
+                        <d2 value="2">Tuesday</d2>
+                        <d3 value="3">Wednesday</d3>
+                        <d4 value="4">Thursday</d4>
+                        <d5 value="5">Friday</d5>
+                        <d6 value="6">Saturday</d6>
+                        <d7 value="7">Sunday</d7>
+                    </OptionValues>
+                </days>
+                <block_from type="TextField">
+                    <Required>Y</Required>
+                    <Default>23:00</Default>
+                    <Mask>/^([01][0-9]|2[0-3]):[0-5][0-9]$/</Mask>
+                    <ValidationMessage>Time should look like 23:00.</ValidationMessage>
+                </block_from>
+                <block_to type="TextField">
+                    <Required>Y</Required>
+                    <Default>07:00</Default>
+                    <Mask>/^([01][0-9]|2[0-3]):[0-5][0-9]$/</Mask>
+                    <ValidationMessage>Time should look like 07:00.</ValidationMessage>
+                </block_to>
+            </device>
+        </devices>
+    </items>
+</model>

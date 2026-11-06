@@ -44,7 +44,7 @@
     </jkufwtraffic>
     <jkufwclients>
         <filename>JkUfwClients.js</filename>
-        <link>/ui/diagnostics/interface/arp</link>
+        <link>/ui/jkufw/devices</link>
         <endpoints>
             <endpoint>/api/diagnostics/interface/get_arp</endpoint>
             <endpoint>/api/diagnostics/traffic/*</endpoint>

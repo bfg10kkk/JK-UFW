@@ -1,0 +1,6 @@
+<menu>
+    <!-- jk-ufw additions, kept in their own file so upstream menu changes merge cleanly -->
+    <Lobby>
+        <Devices VisibleName="Devices" order="1" url="/ui/jkufw/devices" cssClass="fa fa-laptop fa-fw"/>
+    </Lobby>
+</menu>

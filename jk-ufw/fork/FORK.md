@@ -77,3 +77,26 @@ System › Firmware › Reporter, чтобы их можно было прило
 Пока нет своего сервера пакетов, система берёт обновления с зеркала основного проекта, и обновление пакета
 core вернёт старое название в интерфейсе. Поэтому обновляйтесь пересборкой (раздел 1 или 2) или поднимите
 свой сервер пакетов со своим ключом подписи и укажите его в `PKGSITE`.
+
+## 7. Блокировка стран (карта)
+
+Страница **Firewall › Country Blocking** (`/ui/firewall/geoblock`) и виджет дашборда «jk-ufw: Блокировка стран».
+Страны выбираются кликом по карте мира или в списке по регионам, направление: входящие, исходящие или в обе стороны.
+Под капотом это обычные средства: GeoIP-алиас `jkufw_geoblock` и два плавающих правила блокировки
+`jk-ufw: geoblock in` / `jk-ufw: geoblock out` (видны в Firewall › Rules, пишут в журнал).
+
+Нужна база MaxMind GeoLite2: бесплатная регистрация на maxmind.com, ключ вставляется прямо на странице,
+база скачивается сразу и дальше обновляется сама. Свой адрес базы тоже можно вставить вместо ключа.
+
+Файлы: `src/opnsense/mvc/app/controllers/OPNsense/Firewall/GeoblockController.php`,
+`src/opnsense/mvc/app/views/OPNsense/Firewall/geoblock.volt`, `src/opnsense/www/js/jkufw-worldmap.js`
+(контуры стран Natural Earth 1:110m, общественное достояние), `src/opnsense/www/js/widgets/JkUfwGeoblock.js`,
+`src/opnsense/mvc/app/models/OPNsense/JkUfw/{Menu/Menu.xml,ACL/ACL.xml}`.
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-geoblock.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-geoblock.sh
+sh /tmp/try-geoblock.sh                 # или: sh /tmp/try-geoblock.sh <ветка>
+sh /tmp/try-geoblock.sh --remove        # убрать
+```

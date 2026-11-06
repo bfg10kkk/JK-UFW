@@ -1,0 +1,8 @@
+<menu>
+    <!-- jk-ufw additions, kept in their own file so upstream menu changes merge cleanly -->
+    <VPN>
+        <WireGuard>
+            <RemoteAccess VisibleName="Remote Access" order="5" url="/ui/wireguard/remote"/>
+        </WireGuard>
+    </VPN>
+</menu>

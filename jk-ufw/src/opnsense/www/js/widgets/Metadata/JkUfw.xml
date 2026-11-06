@@ -215,4 +215,40 @@
             <nobody>Сейчас никто не подключён</nobody>
         </translations>
     </jkufwvpn>
+    <jkufwparental>
+        <filename>JkUfwParental.js</filename>
+        <link>/ui/jkufw/parental</link>
+        <endpoints>
+            <endpoint>/api/jkufw/parental/status</endpoint>
+            <endpoint>/api/jkufw/parental/pause</endpoint>
+            <endpoint>/api/unbound/overview/get_policies</endpoint>
+            <endpoint>/api/unbound/overview/is_enabled</endpoint>
+            <endpoint>/api/unbound/overview/totals</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Родительский контроль</title>
+            <filter>Фильтр</filter>
+            <blocked>Заблокировано</blocked>
+            <offline>Офлайн</offline>
+            <devices>Устройства</devices>
+            <settings>Настройки</settings>
+            <on>Включён</on>
+            <off>Выключен</off>
+            <enable>Включить</enable>
+            <category1>категория</category1>
+            <category2>категории</category2>
+            <category5>категорий</category5>
+            <of_queries>запросов</of_queries>
+            <no_stats>статистика DNS выключена</no_stats>
+            <of>из</of>
+            <nobody>Нет устройств с расписанием</nobody>
+            <add>Добавить устройство</add>
+            <paused>На паузе</paused>
+            <no_internet>Без интернета</no_internet>
+            <online>Интернет есть</online>
+            <until>до</until>
+            <pause>Пауза</pause>
+            <resume>Вернуть</resume>
+        </translations>
+    </jkufwparental>
 </metadata>

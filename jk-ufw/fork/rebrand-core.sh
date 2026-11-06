@@ -175,7 +175,9 @@ CP="$CORE/src/opnsense/scripts/captiveportal/htdocs_default"
 for f in OPNsense-logo.svg OPNsense-logo-diap.svg default-logo.svg; do cp "$KIT/assets/default-logo.svg" "$CP/images/$f"; done
 cp "$KIT/assets/favicon.png" "$CP/images/favicon.png"
 cp "$KIT/assets/favicon.ico" "$CP/favicon/favicon.ico"
-sed -i.bak -e 's|content="OPNsense"|content="'"$PRODUCT"'"|' -e 's|alt="OPNsense"|alt="'"$PRODUCT"'"|' "$CP/index.html" && rm -f "$CP/index.html.bak"
+# crimson login page; texts per zone come from jkufw.json (written by Services > Captive Portal > Guest Network)
+cp "$KIT/src/opnsense/scripts/captiveportal/htdocs_default/index.html" "$CP/index.html"
+cp "$KIT/src/opnsense/scripts/captiveportal/htdocs_default/css/signin.css" "$CP/css/signin.css"
 
 cp "$KIT/LICENSE" "$CORE/src/opnsense/www/themes/jkufw/LICENSE"
 cp "$KIT/LICENSE.upstream" "$CORE/src/opnsense/www/themes/jkufw/LICENSE.upstream"

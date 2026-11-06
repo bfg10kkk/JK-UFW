@@ -1,0 +1,8 @@
+<menu>
+    <!-- jk-ufw additions, kept in their own file so upstream menu changes merge cleanly -->
+    <Services>
+        <CaptivePortal>
+            <Guest VisibleName="Guest Network" order="5" url="/ui/captiveportal/guest"/>
+        </CaptivePortal>
+    </Services>
+</menu>

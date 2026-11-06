@@ -1,0 +1,173 @@
+<!doctype html>
+<!--
+  jk-ufw: guest login page (captive portal). Texts come from jkufw.json, which the
+  "Guest Network" page (/ui/captiveportal/guest) puts into the zone template.
+  BSD-2-Clause, see LICENSE in the jk-ufw-theme package.
+-->
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8">
+		<title>Гостевой Wi-Fi</title>
+		<link rel="shortcut icon" href="favicon/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+		<link href="css/signin.css" rel="stylesheet">
+		<meta name="theme-color" content="#0b0b0d">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="jk-ufw">
+	</head>
+	<body>
+		<div class="glow"></div>
+		<main class="shell">
+			<div class="card">
+				<div class="brand"><img src="images/default-logo.svg" alt="jk-ufw"></div>
+				<div class="wifi" aria-hidden="true">
+					<svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+				</div>
+				<h1 id="title">Гостевой Wi-Fi</h1>
+				<div class="text" id="text"></div>
+
+				<!-- login with name and password (or voucher) -->
+				<form id="login_password" class="form hidden" autocomplete="off">
+					<label class="field"><span id="user_label">Логин или код ваучера</span>
+						<input type="text" id="inputUsername" required autocapitalize="none" autocorrect="off" spellcheck="false"></label>
+					<label class="field"><span>Пароль</span>
+						<input type="password" id="inputPassword" autocomplete="new-password"></label>
+				</form>
+
+				<!-- terms of use, shown when configured -->
+				<div id="terms_box" class="terms hidden">
+					<label class="check"><input type="checkbox" id="accept"><i></i>
+						<span>Я принимаю <a href="#" id="terms_toggle">правила пользования</a></span></label>
+					<div class="terms-text hidden" id="terms_text"></div>
+				</div>
+
+				<button class="btn hidden" id="signin" type="button">Подключиться</button>
+
+				<!-- already logged in -->
+				<div id="logout_frm" class="done hidden">
+					<div class="ok-ic">&#10003;</div>
+					<div class="ok-t" id="done_title">Вы подключены</div>
+					<div class="ok-s" id="done_text">Можно пользоваться интернетом.</div>
+					<button class="btn ghost" id="logoff" type="button">Отключиться</button>
+				</div>
+
+				<div class="alert hidden" role="alert" id="alertMSG"><span id="errorMSGtext"></span>
+					<button type="button" class="x" id="btnCloseError" aria-label="Закрыть">&times;</button></div>
+				<div class="loading" id="loading">Проверяем подключение…</div>
+			</div>
+			<footer>Защищено <b>jk-ufw</b></footer>
+		</main>
+		<script>
+		(function () {
+			'use strict';
+			var $ = function (id) { return document.getElementById(id); };
+			var show = function (id, on) { $(id).classList[on === false ? 'add' : 'remove']('hidden'); };
+			var params = new URLSearchParams(window.location.search);
+			var redirurl = params.get('redirurl');
+			var cfg = {accept: false};
+			var authType = 'normal';
+
+			function paragraphs(el, value) {
+				el.textContent = '';
+				String(value || '').split(/\n{2,}/).forEach(function (p) {
+					if (p.trim() === '') { return; }
+					var node = document.createElement('p');
+					node.textContent = p.trim();
+					el.appendChild(node);
+				});
+			}
+			function error(msg) {
+				$('errorMSGtext').textContent = msg;
+				show('alertMSG');
+			}
+			function post(url, data) {
+				return fetch(url, {
+					method: 'POST',
+					headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+					body: new URLSearchParams(data || {}).toString(),
+					credentials: 'same-origin'
+				}).then(function (r) {
+					if (!r.ok) { throw new Error(r.status); }
+					return r.json();
+				});
+			}
+			function applyConfig(c) {
+				cfg = c || cfg;
+				if (cfg.title) { $('title').textContent = cfg.title; document.title = cfg.title; }
+				paragraphs($('text'), cfg.text);
+				if (cfg.button) { $('signin').textContent = cfg.button; }
+				if (cfg.user_label) { $('user_label').textContent = cfg.user_label; }
+				if (cfg.success) { paragraphs($('done_text'), cfg.success); }
+				if (cfg.terms) { paragraphs($('terms_text'), cfg.terms); }
+				else { $('terms_toggle').removeAttribute('href'); }
+			}
+			function showLogin() {
+				show('loading', false);
+				show('login_password', authType !== 'none');
+				show('terms_box', !!cfg.accept);
+				show('signin');
+				syncButton();
+				if (authType !== 'none') { $('inputUsername').focus(); }
+			}
+			function showDone() {
+				show('loading', false);
+				['login_password', 'terms_box', 'signin', 'alertMSG'].forEach(function (id) { show(id, false); });
+				show('logout_frm');
+			}
+			function syncButton() {
+				$('signin').disabled = !!cfg.accept && !$('accept').checked;
+			}
+			function logon() {
+				show('alertMSG', false);
+				if (cfg.accept && !$('accept').checked) { return; }
+				$('signin').disabled = true;
+				var anon = authType === 'none';
+				post('/api/captiveportal/access/logon/', {
+					user: anon ? '' : $('inputUsername').value,
+					password: anon ? '' : $('inputPassword').value
+				}).then(function (data) {
+					if (data.clientState === 'AUTHORIZED') {
+						var target = redirurl ? 'http://' + redirurl + '?refresh' : (cfg.redirect || '');
+						if (target) { window.location = target; } else { showDone(); }
+					} else {
+						$('inputPassword').value = '';
+						error(anon ? 'Не удалось подключиться. Попробуйте ещё раз.' : 'Неверный логин, пароль или ваучер.');
+					}
+				}).catch(function () {
+					error('Нет связи с сервером входа. Попробуйте ещё раз через минуту.');
+				}).then(syncButton);
+			}
+
+			$('signin').addEventListener('click', logon);
+			$('login_password').addEventListener('submit', function (e) { e.preventDefault(); logon(); });
+			['inputUsername', 'inputPassword'].forEach(function (id) {
+				$(id).addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); logon(); } });
+			});
+			$('accept').addEventListener('change', syncButton);
+			$('terms_toggle').addEventListener('click', function (e) {
+				e.preventDefault();
+				if (cfg.terms) { $('terms_text').classList.toggle('hidden'); }
+			});
+			$('btnCloseError').addEventListener('click', function () { show('alertMSG', false); });
+			$('logoff').addEventListener('click', function () {
+				post('/api/captiveportal/access/logoff/', {user: '', password: ''})
+					.then(function () { window.location.reload(); })
+					.catch(function () { error('Нет связи с сервером входа.'); });
+			});
+
+			var config = fetch('jkufw.json', {cache: 'no-store'})
+				.then(function (r) { return r.ok ? r.json() : null; })
+				.catch(function () { return null; })
+				.then(function (c) { applyConfig(c); });
+			var status = post('/api/captiveportal/access/status/', {user: '', password: ''});
+			config.then(function () { return status; }).then(function (data) {
+				authType = data.authType === 'none' ? 'none' : 'normal';
+				if (data.clientState === 'AUTHORIZED') { showDone(); } else { showLogin(); }
+			}).catch(function () {
+				show('loading', false);
+				error('Нет связи с сервером входа. Обновите страницу.');
+			});
+		})();
+		</script>
+	</body>
+</html>

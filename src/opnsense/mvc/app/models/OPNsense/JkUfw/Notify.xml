@@ -1,0 +1,48 @@
+<model>
+    <mount>//OPNsense/JkUfw/notify</mount>
+    <description>jk-ufw: Telegram notifications</description>
+    <version>1.0.0</version>
+    <items>
+        <enabled type="BooleanField">
+            <Default>0</Default>
+            <Required>Y</Required>
+        </enabled>
+        <token type="TextField">
+            <Mask>/^([0-9]{5,15}:[A-Za-z0-9_-]{30,64})?$/</Mask>
+            <ValidationMessage>Токен выглядит так: 123456789:AAE... (его выдаёт @BotFather).</ValidationMessage>
+        </token>
+        <chat_id type="TextField">
+            <Mask>/^(-?[0-9]{1,20}|@[A-Za-z0-9_]{5,32})?$/</Mask>
+            <ValidationMessage>ID чата: число (у групп начинается с минуса) или @имя_канала.</ValidationMessage>
+        </chat_id>
+        <threats type="BooleanField">
+            <Default>1</Default>
+            <Required>Y</Required>
+        </threats>
+        <threat_severity type="OptionField">
+            <Default>2</Default>
+            <Required>Y</Required>
+            <OptionValues>
+                <o1 value="1">High only</o1>
+                <o2 value="2">High and medium</o2>
+                <o3 value="3">All</o3>
+            </OptionValues>
+        </threat_severity>
+        <wan type="BooleanField">
+            <Default>1</Default>
+            <Required>Y</Required>
+        </wan>
+        <login_ok type="BooleanField">
+            <Default>1</Default>
+            <Required>Y</Required>
+        </login_ok>
+        <login_fail type="BooleanField">
+            <Default>1</Default>
+            <Required>Y</Required>
+        </login_fail>
+        <silent type="BooleanField">
+            <Default>0</Default>
+            <Required>Y</Required>
+        </silent>
+    </items>
+</model>

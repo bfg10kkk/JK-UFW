@@ -89,7 +89,7 @@ export default class JkUfwVpn extends BaseWidget {
             .sort((a, b) => order[a.state] - order[b.state] || (b.rx + b.tx) - (a.rx + a.tx));
         if (!items.length) {
             $(`#${this.id}-list`).html(`<div class="jk-empty">${this.t('none', 'No VPN tunnels configured')}<br>
-                <a href="/ui/wireguard/general">WireGuard</a> · <a href="/ui/openvpn/instances">OpenVPN</a></div>`);
+                <a href="/ui/wireguard/remote">WireGuard + QR</a> · <a href="/ui/openvpn/instances">OpenVPN</a></div>`);
         } else if (!shown.length) {
             $(`#${this.id}-list`).html(`<div class="jk-empty">${this.t('nobody', 'Nobody is connected')}</div>`);
         } else {

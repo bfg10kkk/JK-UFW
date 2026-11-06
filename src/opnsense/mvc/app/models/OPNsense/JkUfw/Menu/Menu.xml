@@ -1,0 +1,8 @@
+<menu>
+    <!-- jk-ufw additions, kept in their own file so upstream menu changes merge cleanly -->
+    <System>
+        <Settings>
+            <Notifications VisibleName="Notifications" url="/ui/jkufw/notify"/>
+        </Settings>
+    </System>
+</menu>

@@ -5,4 +5,7 @@
             <Threats VisibleName="Threat Management" order="5" url="/ui/ids/threats"/>
         </IDS>
     </Services>
+    <Lobby>
+        <Devices VisibleName="Devices" order="1" url="/ui/jkufw/devices" cssClass="fa fa-laptop fa-fw"/>
+    </Lobby>
 </menu>

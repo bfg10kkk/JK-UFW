@@ -2,18 +2,19 @@
     <!-- jk-ufw additions, kept in their own file so upstream menu changes merge cleanly -->
     <Services>
         <IDS>
-            <Threats VisibleName="Threat Management" order="5" url="/ui/ids/threats"/>
+            <Threats VisibleName="Threat Management" order="5" url="/ui/ids/threats" />
         </IDS>
     </Services>
     <Lobby>
-        <Devices VisibleName="Devices" order="1" url="/ui/jkufw/devices" cssClass="fa fa-laptop fa-fw"/>
+        <Devices VisibleName="Devices" order="1" url="/ui/jkufw/devices" cssClass="fa fa-laptop fa-fw" />
     </Lobby>
     <VPN>
         <WireGuard>
-            <RemoteAccess VisibleName="Remote Access" order="5" url="/ui/wireguard/remote"/>
+            <RemoteAccess VisibleName="Remote Access" order="5" url="/ui/wireguard/remote" />
         </WireGuard>
     </VPN>
     <Firewall>
-        <Geoblock VisibleName="Country Blocking" order="5" url="/ui/firewall/geoblock" cssClass="fa fa-globe fa-fw"/>
+        <Geoblock VisibleName="Country Blocking" order="5" url="/ui/firewall/geoblock" cssClass="fa fa-globe fa-fw" />
+        <ContentFilter VisibleName="Content Filter" order="45" url="/ui/jkufw/parental" cssClass="fa fa-child fa-fw" />
     </Firewall>
 </menu>

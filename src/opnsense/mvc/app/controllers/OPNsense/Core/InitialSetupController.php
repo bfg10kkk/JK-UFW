@@ -69,6 +69,11 @@ class InitialSetupController extends IndexController
                 )
             ],
         ];
-        $this->view->pick('OPNsense/Core/initial_setup');
+        if ($this->request->get('classic') !== null) {
+            $this->view->pick('OPNsense/Core/initial_setup');
+        } else {
+            /* jk-ufw: step-by-step wizard over the same API, the classic tabs stay available with ?classic */
+            $this->view->pick('OPNsense/Core/jkufw_setup');
+        }
     }
 }

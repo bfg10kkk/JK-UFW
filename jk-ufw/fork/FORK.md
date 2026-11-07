@@ -78,7 +78,21 @@ System › Firmware › Reporter, чтобы их можно было прило
 core вернёт старое название в интерфейсе. Поэтому обновляйтесь пересборкой (раздел 1 или 2) или поднимите
 свой сервер пакетов со своим ключом подписи и укажите его в `PKGSITE`.
 
-## 6. Защита от угроз (IDS/IPS)
+## 6. Все новые функции сразу
+
+Семь страниц, мастер настройки и виджеты из разделов 7–14 ставятся на работающий экран одной командой (под root),
+без пересборки образа:
+
+```sh
+fetch -o /tmp/try-all.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-all.sh
+sh /tmp/try-all.sh                 # или: sh /tmp/try-all.sh <ветка>
+sh /tmp/try-all.sh --remove        # убрать всё
+```
+
+Скрипт по очереди запускает `try-*.sh` из `jk-ufw/features/`, каждый можно запускать и отдельно.
+Обновление core (System › Firmware) перезапишет эти файлы, после него запустите скрипт ещё раз.
+
+## 7. Защита от угроз (IDS/IPS)
 
 Страница **Services › Intrusion Detection › Threat Management** (`/ui/ids/threats`) и виджет дашборда
 «jk-ufw: Защита от угроз (IPS)». Это надстройка над встроенным Suricata: режим (выкл / IDS / IPS), интерфейсы,
@@ -100,3 +114,173 @@ sh /tmp/try-ids.sh --remove        # убрать
 
 Для IPS отключите аппаратную разгрузку (Interfaces › Settings: CRC, TSO, LRO) и перезагрузитесь. В VirtualBox
 подходят адаптеры Intel PRO/1000 и virtio-net.
+
+## 8. Устройства в сети
+
+Страница **Lobby › Devices** (`/ui/jkufw/devices`), в стиле раздела Clients из UniFi. Список собирается из таблиц
+ARP и NDP, аренд Kea и Dnsmasq и Host Discovery (если включён): имя, производитель по MAC, адреса, сеть, аренда,
+когда устройство впервые и последний раз замечено. Скорость скачивания и отдачи по каждому устройству берётся из
+iftop на локальных интерфейсах раз в 10 секунд. Виджет дашборда «jk-ufw: Устройства» ведёт на эту страницу.
+
+В один клик:
+- **Заблокировать.** MAC и текущие IP устройства попадают в псевдонимы `jkufw_block_mac` и `jkufw_block_ip`,
+  одно плавающее правило `jk-ufw: blocked devices` (создаётся при первой блокировке) закрывает им всё, кроме
+  обращений к самому экрану (DNS, DHCP, веб-интерфейс). Открытые соединения устройства сбрасываются.
+- **Ограничить скорость.** Для устройства создаются два канала шейпера `jk-ufw limit <MAC> down|up` и два правила
+  на его локальном интерфейсе. Если устройство потом получит другой IP, нажмите «Изменить», чтобы обновить правила.
+
+Файлы: `src/opnsense/mvc/app/controllers/OPNsense/JkUfw/DevicesController.php`,
+`src/opnsense/mvc/app/views/OPNsense/JkUfw/devices.volt`, `src/opnsense/mvc/app/models/OPNsense/JkUfw/ACL/ACL.xml`,
+`src/opnsense/mvc/app/models/OPNsense/JkUfw/Menu/Menu.xml`.
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-devices.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-devices.sh
+sh /tmp/try-devices.sh                 # или: sh /tmp/try-devices.sh <ветка>
+sh /tmp/try-devices.sh --remove        # убрать
+```
+
+## 9. VPN для удалённого доступа (WireGuard + QR-код)
+
+Страница **VPN › WireGuard › Remote Access** (`/ui/wireguard/remote`). Надстройка над встроенным WireGuard:
+кнопка «Включить VPN» создаёт сервер `jkufw_vpn` (сеть 10.66.0.0/24, UDP 51820), открывает порт на WAN,
+разрешает трафик клиентов (правила `jk-ufw VPN: …` на группе WireGuard) и добавляет исходящий NAT для выхода
+в интернет. Если исходящий NAT был в режиме «автоматический», он переключается на «гибридный»: автоматические
+правила остаются, к ним добавляется одно наше. Дальше «Добавить устройство» создаёт ключи и показывает QR-код
+для приложения WireGuard и файл `.conf` для компьютера. Устройства можно отключать и удалять, у каждого видно,
+в сети ли оно и сколько трафика прошло. Сервер и устройства обычные, их видно и на старой странице
+(кнопка «Расширенные»).
+
+QR-код рисует `qrcode.js` (MIT, Kazuhiko Arase), он уже входит в core, отдельная библиотека не нужна.
+
+Если экран стоит за другим роутером (WAN с адресом 192.168.x.x, как в VirtualBox), страница об этом
+предупредит: на том роутере нужно пробросить UDP 51820 на экран и указать внешний IP или имя DDNS.
+
+Файлы: `src/opnsense/mvc/app/controllers/OPNsense/Wireguard/RemoteController.php`,
+`src/opnsense/mvc/app/views/OPNsense/Wireguard/remote.volt`, пункт меню в
+`src/opnsense/mvc/app/models/OPNsense/JkUfw/Menu/Menu.xml`.
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-vpn.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-vpn.sh
+sh /tmp/try-vpn.sh                 # или: sh /tmp/try-vpn.sh <ветка>
+sh /tmp/try-vpn.sh --remove        # убрать страницу (сервер и правила остаются)
+```
+
+## 10. Блокировка стран (карта)
+
+Страница **Firewall › Country Blocking** (`/ui/firewall/geoblock`) и виджет дашборда «jk-ufw: Блокировка стран».
+Страны выбираются кликом по карте мира или в списке по регионам, направление: входящие, исходящие или в обе стороны.
+Под капотом это обычные средства: GeoIP-алиас `jkufw_geoblock` и два плавающих правила блокировки
+`jk-ufw: geoblock in` / `jk-ufw: geoblock out` (видны в Firewall › Rules, пишут в журнал).
+
+Нужна база MaxMind GeoLite2: бесплатная регистрация на maxmind.com, ключ вставляется прямо на странице,
+база скачивается сразу и дальше обновляется сама. Свой адрес базы тоже можно вставить вместо ключа.
+
+Файлы: `src/opnsense/mvc/app/controllers/OPNsense/Firewall/GeoblockController.php`,
+`src/opnsense/mvc/app/views/OPNsense/Firewall/geoblock.volt`, `src/opnsense/www/js/jkufw-worldmap.js`
+(контуры стран Natural Earth 1:110m, общественное достояние), `src/opnsense/www/js/widgets/JkUfwGeoblock.js`,
+`src/opnsense/mvc/app/models/OPNsense/JkUfw/{Menu/Menu.xml,ACL/ACL.xml}`.
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-geoblock.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-geoblock.sh
+sh /tmp/try-geoblock.sh                 # или: sh /tmp/try-geoblock.sh <ветка>
+sh /tmp/try-geoblock.sh --remove        # убрать
+```
+
+## 11. Фильтр контента и родительский контроль
+
+Страница **Firewall › Content Filter** (`/ui/jkufw/parental`) и виджет дашборда «jk-ufw: Родительский контроль».
+
+- **Фильтрация** — надстройка над списками блокировки Unbound DNS: уровни «Базовый / Семейный / Строгий» и категории
+  (реклама, мошенники, 18+, казино, обход фильтра, соцсети, пиратство), свои списки «всегда блокировать / разрешать»,
+  профили для групп устройств по IP (в Unbound побеждает самый точный профиль), безопасный поиск,
+  запрет сторонних DNS (порты 53 и 853 только к роутеру), статистика и проверка сайта.
+- **Расписание и пауза** — модель `OPNsense/JkUfw/Parental`. При сохранении для каждого устройства создаются
+  псевдоним `jkufw_<id>` (MAC или IP), расписание `jkufw_<id>` (часы, когда интернет разрешён) и два плавающих правила
+  с пометкой `[jk-ufw]`: pass по расписанию и reject после него. Когда расписание заканчивается, OPNsense убирает pass
+  и сбрасывает его соединения; при паузе соединения устройства сбрасываются сразу. Расписание проверяется кроном
+  каждые 15 минут. Эти объекты пересоздаются при каждом сохранении, руками их не меняйте.
+
+Файлы: `controllers/OPNsense/JkUfw/{ParentalController.php,Api/ParentalController.php}`,
+`models/OPNsense/JkUfw/{Parental.xml,Parental.php,ACL/ACL.xml,Menu/Menu.xml}`, `views/OPNsense/JkUfw/parental.volt`,
+`www/js/widgets/JkUfwParental.js`.
+
+Попробовать на работающем экране (под root):
+
+```sh
+fetch -o /tmp/try-parental.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-parental.sh
+sh /tmp/try-parental.sh            # или: sh /tmp/try-parental.sh <ветка>
+sh /tmp/try-parental.sh --remove   # убрать (сначала удалите устройства на странице)
+```
+
+Фильтр работает, только если включён Unbound и устройства используют роутер как DNS (по умолчанию так и есть).
+
+## 12. Уведомления в Telegram
+
+Страница **System › Settings › Notifications** (`/ui/jkufw/notify`): угрозы из IDS/IPS, пропадание и
+возврат интернета, входы в веб-интерфейс и неудачные попытки. Как получить токен бота, настроить и проверить:
+[jk-ufw/features/notify.md](../features/notify.md).
+
+## 13. Гостевая сеть
+
+Страница **Services › Captive Portal › Guest Network** (`/ui/captiveportal/guest`) и виджет дашборда
+«jk-ufw: Гостевая сеть». Один экран вместо пяти разделов: новая VLAN на существующем порту (или свободный порт,
+или готовый интерфейс), адрес шлюза, DHCP через Dnsmasq, изоляция от локальной сети, страница входа (без пароля,
+по ваучеру или по учётной записи, с правилами пользования), скорость на одно устройство, длительность сеанса и
+список подключённых гостей с кнопкой «Отключить».
+
+Что создаётся (всё через штатные API, найти можно по имени `jk-ufw guest`):
+- VLAN и интерфейс `GUEST` со статическим адресом;
+- диапазон DHCP в Dnsmasq (если служба включена; иначе DHCP настраивается вручную);
+- псевдоним `jkufw_private` (частные сети) и три правила на интерфейсе: запрет к самому экрану, запрет к частным
+  сетям, разрешение в интернет. DNS и сама страница входа разрешены автоматически правилами портала;
+- два канала шейпера с маской по адресу (у каждого устройства своя полоса) и два правила к ним;
+- зона Captive Portal с шаблоном `jkufw_guest`. В шаблоне лежит только `jkufw.json` с текстами страницы, а сама
+  страница входа (`src/opnsense/scripts/captiveportal/htdocs_default`) общая для всех зон и обновляется вместе с core.
+
+Выключатель «Включена» отключает зону и правило доступа в интернет: гости остаются в своей сети, но без интернета.
+Кнопка «Удалить гостевую сеть» убирает всё перечисленное, кроме псевдонима.
+
+Файлы: `src/opnsense/mvc/app/controllers/OPNsense/CaptivePortal/GuestController.php`,
+`src/opnsense/mvc/app/views/OPNsense/CaptivePortal/guest.volt`, `src/opnsense/mvc/app/models/OPNsense/JkUfw/Menu/Menu.xml`,
+`src/opnsense/www/js/widgets/JkUfwGuest.js`, страница входа в `jk-ufw/src/opnsense/scripts/captiveportal/htdocs_default`
+(скрипт переименования копирует её в core).
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-guest.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-guest.sh
+sh /tmp/try-guest.sh                 # или: sh /tmp/try-guest.sh <ветка>
+sh /tmp/try-guest.sh --remove        # убрать
+```
+
+В VirtualBox для проверки удобнее «Свободный порт»: добавьте виртуальной машине третий адаптер (Internal Network)
+и подключите к той же внутренней сети вторую машину-гостя. Для VLAN нужен коммутатор или точка доступа с тегами.
+
+## 14. Мастер первой настройки
+
+При первом входе (и в меню **System › Wizard**, `/ui/core/initial_setup`) открывается мастер jk-ufw: приветствие
+и четыре шага: «Интернет» (DHCP, PPPoE или статический адрес), «Локальная сеть» (адрес экрана, раздача адресов, имя),
+«Доступ» (пароль root, часовой пояс, язык) и «Защита» (защита от угроз IDS/IPS, фильтры bogons и частных сетей,
+DNS-резолвер и DNSSEC), затем сводка и применение. Мастер работает через тот же API, что и исходный
+(`/api/core/initial_setup/*`), поэтому проверки и запись настроек не изменились. Защита от угроз включается через
+`/api/ids/*` с теми же наборами правил («Рекомендуемый» уровень) и той же политикой `jk-ufw: block threats`, что и
+страница Threat Management. Если меняется адрес LAN, мастер в конце показывает новый адрес панели.
+Исходный мастер с вкладками остался: `/ui/core/initial_setup?classic`.
+
+Файлы: `src/opnsense/mvc/app/views/OPNsense/Core/jkufw_setup.volt` (новый) и одна правка в
+`src/opnsense/mvc/app/controllers/OPNsense/Core/InitialSetupController.php` (выбор шаблона). Если при слиянии
+с основным проектом в контроллере будет конфликт, возьмите их версию и верните условие с `classic`.
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-setup.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-setup.sh
+sh /tmp/try-setup.sh                 # или: sh /tmp/try-setup.sh <ветка>
+sh /tmp/try-setup.sh --remove        # вернуть исходный мастер
+```

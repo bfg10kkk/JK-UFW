@@ -4,6 +4,9 @@
         <IDS>
             <Threats VisibleName="Threat Management" order="5" url="/ui/ids/threats" />
         </IDS>
+        <CaptivePortal>
+            <Guest VisibleName="Guest Network" order="5" url="/ui/captiveportal/guest" />
+        </CaptivePortal>
     </Services>
     <Lobby>
         <Devices VisibleName="Devices" order="1" url="/ui/jkufw/devices" cssClass="fa fa-laptop fa-fw" />
@@ -19,7 +22,7 @@
     </Firewall>
     <System>
         <Settings>
-            <Notifications VisibleName="Notifications" url="/ui/jkufw/notify"/>
+            <Notifications VisibleName="Notifications" url="/ui/jkufw/notify" />
         </Settings>
     </System>
 </menu>

@@ -305,4 +305,21 @@
             <resume>Вернуть</resume>
         </translations>
     </jkufwparental>
+    <jkufwguest>
+        <filename>JkUfwGuest.js</filename>
+        <link>/ui/captiveportal/guest</link>
+        <endpoints>
+            <endpoint>/api/captiveportal/settings/search_zones</endpoint>
+            <endpoint>/api/captiveportal/session/search</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Гостевая сеть</title>
+            <none>Гостевая сеть не настроена</none>
+            <setup>Настроить</setup>
+            <online>гостей в сети</online>
+            <on>Включена</on>
+            <off>Выключена</off>
+            <nobody>Сейчас никто не подключён</nobody>
+        </translations>
+    </jkufwguest>
 </metadata>

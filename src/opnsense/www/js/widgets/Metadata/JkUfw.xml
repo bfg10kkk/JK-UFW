@@ -247,4 +247,26 @@
             <nothing>Угроз не найдено</nothing>
         </translations>
     </jkufwthreats>
+    <jkufwgeoblock>
+        <filename>JkUfwGeoblock.js</filename>
+        <link>/ui/firewall/geoblock</link>
+        <endpoints>
+            <endpoint>/api/firewall/alias/get_alias_uuid</endpoint>
+            <endpoint>/api/firewall/alias/get_item</endpoint>
+            <endpoint>/api/firewall/filter/search_rule</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: Блокировка стран</title>
+            <blocking>Заблокировано</blocking>
+            <inbound>Входящих отброшено</inbound>
+            <outbound>Исходящих отброшено</outbound>
+            <countries>Заблокированные страны</countries>
+            <settings>Настройки</settings>
+            <off>Выключено</off>
+            <enable>Включить</enable>
+            <packets>пакетов</packets>
+            <rule_off>правило выключено</rule_off>
+            <none>Ни одна страна не заблокирована</none>
+        </translations>
+    </jkufwgeoblock>
 </metadata>

@@ -13,4 +13,7 @@
             <RemoteAccess VisibleName="Remote Access" order="5" url="/ui/wireguard/remote"/>
         </WireGuard>
     </VPN>
+    <Firewall>
+        <Geoblock VisibleName="Country Blocking" order="5" url="/ui/firewall/geoblock" cssClass="fa fa-globe fa-fw"/>
+    </Firewall>
 </menu>

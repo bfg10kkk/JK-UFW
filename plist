@@ -307,6 +307,7 @@
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Firewall/CategoryController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Firewall/DNatController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Firewall/FilterController.php
+/usr/local/opnsense/mvc/app/controllers/OPNsense/Firewall/GeoblockController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Firewall/GroupController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Firewall/MigrationController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Firewall/NptController.php
@@ -1028,6 +1029,7 @@
 /usr/local/opnsense/mvc/app/views/OPNsense/Firewall/category.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Firewall/filter_rule.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Firewall/firewall_migration.volt
+/usr/local/opnsense/mvc/app/views/OPNsense/Firewall/geoblock.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Firewall/group.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Firewall/nat_rule.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Hostdiscovery/settings.volt
@@ -2266,6 +2268,7 @@
 /usr/local/opnsense/www/js/d3.min.js
 /usr/local/opnsense/www/js/d3.min.js.LICENSE
 /usr/local/opnsense/www/js/gridstack-all.min.js
+/usr/local/opnsense/www/js/jkufw-worldmap.js
 /usr/local/opnsense/www/js/jquery-3.5.1.min.js
 /usr/local/opnsense/www/js/jquery-sortable.js
 /usr/local/opnsense/www/js/jquery.qrcode.js
@@ -2311,6 +2314,7 @@
 /usr/local/opnsense/www/js/widgets/JkUfwClients.js
 /usr/local/opnsense/www/js/widgets/JkUfwCommon.js
 /usr/local/opnsense/www/js/widgets/JkUfwDns.js
+/usr/local/opnsense/www/js/widgets/JkUfwGeoblock.js
 /usr/local/opnsense/www/js/widgets/JkUfwInternet.js
 /usr/local/opnsense/www/js/widgets/JkUfwOverview.js
 /usr/local/opnsense/www/js/widgets/JkUfwPorts.js

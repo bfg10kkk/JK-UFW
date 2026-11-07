@@ -6,4 +6,15 @@
             <pattern>ui/jkufw/devices</pattern>
         </patterns>
     </page-jkufw-devices>
+    <!-- jk-ufw additions, kept in their own file so upstream ACL changes merge cleanly -->
+    <page-firewall-geoblock>
+        <name>Firewall: Country Blocking</name>
+        <description>Block countries on a world map (manages the jkufw_geoblock GeoIP alias and its two rules)</description>
+        <patterns>
+            <pattern>ui/firewall/geoblock/*</pattern>
+            <pattern>api/firewall/alias/*</pattern>
+            <pattern>api/firewall/filter/*</pattern>
+            <pattern>api/diagnostics/firewall/log</pattern>
+        </patterns>
+    </page-firewall-geoblock>
 </acl>

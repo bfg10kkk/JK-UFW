@@ -520,6 +520,7 @@
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Wireguard/Api/ServiceController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Wireguard/DiagnosticsController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Wireguard/GeneralController.php
+/usr/local/opnsense/mvc/app/controllers/OPNsense/Wireguard/RemoteController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Wireguard/forms/dialogConfigBuilder.xml
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Wireguard/forms/dialogEditWireguardClient.xml
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Wireguard/forms/dialogEditWireguardServer.xml
@@ -1091,6 +1092,7 @@
 /usr/local/opnsense/mvc/app/views/OPNsense/Unbound/stats.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Wireguard/diagnostics.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Wireguard/general.volt
+/usr/local/opnsense/mvc/app/views/OPNsense/Wireguard/remote.volt
 /usr/local/opnsense/mvc/app/views/layout_partials/base_apply_button.volt
 /usr/local/opnsense/mvc/app/views/layout_partials/base_bootgrid_table.volt
 /usr/local/opnsense/mvc/app/views/layout_partials/base_dialog.volt

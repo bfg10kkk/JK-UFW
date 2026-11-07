@@ -25,4 +25,12 @@
             <pattern>api/jkufw/parental/*</pattern>
         </patterns>
     </page-jkufw-parental>
+    <!-- jk-ufw additions -->
+    <page-jkufw-notify>
+        <name>System: Settings: Notifications (Telegram)</name>
+        <patterns>
+            <pattern>ui/jkufw/notify</pattern>
+            <pattern>api/jkufw/notify/*</pattern>
+        </patterns>
+    </page-jkufw-notify>
 </acl>

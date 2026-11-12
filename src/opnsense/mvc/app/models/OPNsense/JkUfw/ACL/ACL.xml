@@ -6,6 +6,12 @@
             <pattern>ui/jkufw/devices</pattern>
         </patterns>
     </page-jkufw-devices>
+    <page-jkufw-topology>
+        <name>Lobby: Topology</name>
+        <patterns>
+            <pattern>ui/jkufw/topology</pattern>
+        </patterns>
+    </page-jkufw-topology>
     <!-- jk-ufw additions, kept in their own file so upstream ACL changes merge cleanly -->
     <page-firewall-geoblock>
         <name>Firewall: Country Blocking</name>

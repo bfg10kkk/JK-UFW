@@ -1059,6 +1059,12 @@ $(function () {
         }
     });
 
-    listLoop().then(trafficLoop);
+    listLoop().then(() => {
+        // /ui/jkufw/devices#<mac> opens that device, used by the Topology page
+        const mac = normMac(decodeURIComponent(location.hash.slice(1)));
+        if (mac && devices.some((d) => d.mac === mac)) {
+            openPanel(mac);
+        }
+    }).then(trafficLoop);
 });
 </script>

@@ -17,7 +17,7 @@ REPO="https://raw.githubusercontent.com/bfg10kkk/JK-UFW"
 BRANCH="${1:-stable/26.7}"
 SRC="$BRANCH"
 [ "$BRANCH" = "--remove" ] && SRC="${2:-stable/26.7}"
-FEATURES="ids devices vpn geoblock parental notify guest setup"
+FEATURES="ids devices topology vpn geoblock parental notify guest setup"
 
 TMP=$(mktemp -d /tmp/jkufw-all.XXXXXX)
 trap 'rm -rf "$TMP"' EXIT
@@ -50,6 +50,7 @@ echo
 echo "All done. New pages:"
 echo "  Threat Management (IDS/IPS)  /ui/ids/threats"
 echo "  Devices                      /ui/jkufw/devices"
+echo "  Network topology             /ui/jkufw/topology"
 echo "  VPN remote access            /ui/wireguard/remote"
 echo "  Country blocking             /ui/firewall/geoblock"
 echo "  Content filter               /ui/jkufw/parental"

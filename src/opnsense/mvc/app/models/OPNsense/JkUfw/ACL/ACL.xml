@@ -33,4 +33,13 @@
             <pattern>api/jkufw/notify/*</pattern>
         </patterns>
     </page-jkufw-notify>
+    <!-- jk-ufw additions -->
+    <page-jkufw-ddos>
+        <name>Firewall: Attack Protection</name>
+        <description>DDoS limits and block list, threat intelligence feeds, log export to a SIEM</description>
+        <patterns>
+            <pattern>ui/jkufw/ddos</pattern>
+            <pattern>api/jkufw/ddos/*</pattern>
+        </patterns>
+    </page-jkufw-ddos>
 </acl>

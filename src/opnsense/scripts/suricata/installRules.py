@@ -55,9 +55,11 @@ if __name__ == '__main__':
         for rule_info_record in RuleCache.list_rules(filename=filename):
             # default behavior, do not touch rule, only copy to output
             rule = rule_info_record['rule']
-            # change rule if in rule updates
+            # change rule if in rule updates (jk-ufw: its own generated jkufw-*.rules keep their action, a
+            # catch-all IPS policy must not turn the file extraction rules into drops)
             if rule_info_record['metadata'] is not None and 'sid' in rule_info_record['metadata'] \
-                    and rule_info_record['metadata']['sid'] in rule_updates:
+                    and rule_info_record['metadata']['sid'] in rule_updates \
+                    and not os.path.basename(filename).startswith('jkufw-'):
                 # search last comment marker
                 for i in range(len(rule_info_record['rule'])):
                     if rule[i] not in ['#', ' ']:

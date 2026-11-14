@@ -1,0 +1,150 @@
+<model>
+    <mount>//OPNsense/JkUfw/antivirus</mount>
+    <version>1.0.0</version>
+    <description>jk-ufw: stream antivirus (proxy + ICAP + ClamAV), file extraction from traffic and sandbox analysis</description>
+    <items>
+        <!-- web downloads scanned on the fly: Squid (transparent) -> c-icap -> clamd; needs plugins os-squid, os-c-icap, os-clamav -->
+        <web>
+            <enabled type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </enabled>
+            <!-- internal interfaces whose web traffic is redirected through the proxy -->
+            <interfaces type="CSVListField">
+                <Default>lan</Default>
+                <Mask>/^[a-z0-9_]{1,32}$/</Mask>
+                <MaskPerItem>Y</MaskPerItem>
+            </interfaces>
+            <!-- also open HTTPS (SSL inspection with our own CA; clients must trust it) -->
+            <https type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </https>
+            <!-- refid of the CA from System > Trust > Authorities -->
+            <ca type="TextField">
+                <Mask>/^[a-zA-Z0-9]{0,32}$/</Mask>
+            </ca>
+            <!-- sites never opened (banks, government services, pinned apps) -->
+            <nobump type="CSVListField">
+                <Mask>/^[a-zA-Z0-9\.\-\*:\[\]]{1,253}$/</Mask>
+                <MaskPerItem>Y</MaskPerItem>
+                <ValidationMessage>Список доменов или адресов через запятую.</ValidationMessage>
+            </nobump>
+            <!-- bigger downloads pass unscanned (c-icap MaxObjectSize), MB -->
+            <maxsize type="IntegerField">
+                <Default>25</Default>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>500</MaximumValue>
+                <Required>Y</Required>
+                <ValidationMessage>От 1 до 500 МБ.</ValidationMessage>
+            </maxsize>
+            <!-- when the scanner fails: pass the file or block it -->
+            <onerror type="OptionField">
+                <Default>pass</Default>
+                <Required>Y</Required>
+                <OptionValues>
+                    <pass>Pass</pass>
+                    <block>Block</block>
+                </OptionValues>
+            </onerror>
+            <!-- set when this page switched the web proxy on, so switching off also stops it -->
+            <managed type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </managed>
+        </web>
+        <!-- files carried in HTTP / SMTP / FTP / SMB / NFS are cut out of traffic by Suricata (file-store) and analysed -->
+        <files>
+            <enabled type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </enabled>
+            <types type="OptionField">
+                <Default>exe,office,pdf,archive,script</Default>
+                <Multiple>Y</Multiple>
+                <Required>Y</Required>
+                <OptionValues>
+                    <exe>Programs</exe>
+                    <office>Office documents</office>
+                    <pdf>PDF</pdf>
+                    <archive>Archives</archive>
+                    <script>Scripts</script>
+                    <android>Android apps</android>
+                    <disk>Disk images</disk>
+                </OptionValues>
+            </types>
+            <maxsize type="IntegerField">
+                <Default>32</Default>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>256</MaximumValue>
+                <Required>Y</Required>
+                <ValidationMessage>От 1 до 256 МБ.</ValidationMessage>
+            </maxsize>
+            <!-- days suspicious and malicious files stay in quarantine; clean ones are deleted after the check -->
+            <keep_days type="IntegerField">
+                <Default>14</Default>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>365</MaximumValue>
+                <Required>Y</Required>
+                <ValidationMessage>От 1 до 365 дней.</ValidationMessage>
+            </keep_days>
+            <keep_clean type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </keep_clean>
+        </files>
+        <!-- hash reputation (no file leaves the firewall) -->
+        <intel>
+            <mb_key type="TextField">
+                <Mask>/^[a-zA-Z0-9]{0,128}$/</Mask>
+                <ValidationMessage>Ключ abuse.ch: латиница и цифры.</ValidationMessage>
+            </mb_key>
+            <vt_key type="TextField">
+                <Mask>/^[a-fA-F0-9]{0,128}$/</Mask>
+                <ValidationMessage>Ключ VirusTotal: 64 шестнадцатеричных символа.</ValidationMessage>
+            </vt_key>
+        </intel>
+        <!-- dynamic analysis: the file is run in an outside sandbox -->
+        <sandbox>
+            <provider type="OptionField">
+                <Default>none</Default>
+                <Required>Y</Required>
+                <OptionValues>
+                    <none>None</none>
+                    <cape>CAPEv2</cape>
+                    <cuckoo>Cuckoo</cuckoo>
+                    <virustotal>VirusTotal</virustotal>
+                </OptionValues>
+            </provider>
+            <url type="UrlField"/>
+            <token type="TextField">
+                <Mask>/^[\x21-\x7e]{0,256}$/</Mask>
+            </token>
+            <verify type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </verify>
+            <!-- which files go there by themselves -->
+            <submit type="OptionField">
+                <Default>unknown</Default>
+                <Required>Y</Required>
+                <OptionValues>
+                    <unknown>Unknown files</unknown>
+                    <all>All files</all>
+                    <manual>Manual only</manual>
+                </OptionValues>
+            </submit>
+        </sandbox>
+        <action>
+            <!-- put the hash of a file found malicious on the block list (proxy ClamAV + Suricata) -->
+            <autoblock type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </autoblock>
+            <suspicious type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </suspicious>
+        </action>
+    </items>
+</model>

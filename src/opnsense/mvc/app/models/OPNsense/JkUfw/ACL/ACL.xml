@@ -33,4 +33,18 @@
             <pattern>api/jkufw/notify/*</pattern>
         </patterns>
     </page-jkufw-notify>
+    <!-- jk-ufw additions -->
+    <page-jkufw-antivirus>
+        <name>Firewall: Antivirus and Sandbox</name>
+        <description>Stream antivirus (web proxy + ICAP + ClamAV), files from traffic, sandbox; installs and configures os-clamav, os-c-icap, os-squid</description>
+        <patterns>
+            <pattern>ui/jkufw/antivirus</pattern>
+            <pattern>api/jkufw/antivirus/*</pattern>
+            <pattern>api/core/firmware/install/*</pattern>
+            <pattern>api/core/firmware/upgradestatus</pattern>
+            <pattern>api/clamav/service/*</pattern>
+            <pattern>api/cicap/service/*</pattern>
+            <pattern>api/proxy/service/*</pattern>
+        </patterns>
+    </page-jkufw-antivirus>
 </acl>

@@ -34,6 +34,7 @@
 | **Уведомления в Telegram** | System › Settings › Notifications | Сообщения об угрозах, пропадании интернета и входах в веб-интерфейс ([настройка](jk-ufw/features/notify.md)) |
 | **Гостевая сеть** | Services › Captive Portal › Guest Network | Отдельная VLAN для гостей со своей страницей входа, изоляцией и ограничением скорости |
 | **Мастер первой настройки** | System › Wizard | Интернет, локальная сеть, пароль и защита за четыре шага |
+| **Антивирус и песочница** | Firewall › Antivirus & Sandbox | Проверка веб-загрузок на лету (прокси + ClamAV), файлы из почты/FTP/SMB/HTTP через IDS, репутация хешей, песочница CAPEv2/Cuckoo/VirusTotal, блок-лист хешей |
 
 | Защита от угроз | Устройства | VPN |
 |---|---|---|
@@ -46,6 +47,10 @@
 | Гостевая сеть | Страница входа для гостей | Мастер настройки |
 |---|---|---|
 | ![](jk-ufw/screenshots/features/guest.png) | ![](jk-ufw/screenshots/features/guest-login.png) | ![](jk-ufw/screenshots/features/setup.png) |
+
+| Антивирус и песочница | Отчёт о файле |
+|---|---|
+| ![](jk-ufw/screenshots/features/antivirus.png) | ![](jk-ufw/screenshots/features/antivirus-report.png) |
 
 ## Установка
 
@@ -64,7 +69,7 @@ sh /tmp/try-all.sh --remove    # убрать всё
 ```
 
 Каждую функцию можно поставить и отдельно скриптом `jk-ufw/features/try-<имя>.sh` (ids, devices, vpn, geoblock,
-parental, notify, guest, setup). Перед установкой сделайте резервную копию настроек (System › Configuration › Backups).
+parental, notify, guest, setup, av). Перед установкой сделайте резервную копию настроек (System › Configuration › Backups).
 Обновление системы через System › Firmware перезаписывает эти файлы, после него запустите скрипт ещё раз.
 
 ## Структура репозитория

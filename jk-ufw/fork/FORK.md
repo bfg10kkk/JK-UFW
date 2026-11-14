@@ -284,3 +284,59 @@ fetch -o /tmp/try-setup.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/sta
 sh /tmp/try-setup.sh                 # или: sh /tmp/try-setup.sh <ветка>
 sh /tmp/try-setup.sh --remove        # вернуть исходный мастер
 ```
+
+## 21. Защита сайтов (WAF)
+
+Страница **Firewall › Web Protection (WAF)** (`/ui/jkufw/waf`). Межсетевой экран веб-приложений для сайтов внутри
+сети, открытых в интернет: экран отвечает на их имена на портах 80/443 (обратный прокси) и проверяет каждый запрос
+до того, как он дойдёт до сервера. Проверки: SQL-инъекции и XSS (сигнатуры + libinjection), обход каталогов,
+подключение чужих файлов (RFI), приёмы обхода защиты, опасные загрузки, известные сканеры уязвимостей. Для каждого
+сайта режим «Только наблюдать» (атаки пишутся в журнал, но проходят; удобно первые дни) или «Блокировать».
+На странице: атаки за сутки по типам и часам, самые активные адреса, последние запросы с причиной.
+
+Движок не новый: модуль nginx (`os-nginx`) с NAXSI и базовыми правилами `naxsi_core.rules`, страница ставит его
+и загружает правила сама. Применение пишет обычные объекты nginx с описанием `jk-ufw waf: <сайт>` (upstream, location
+с NAXSI, HTTP-сервер) и правила `[jk-ufw waf]` на выбранных интерфейсах. Объекты nginx, созданные вручную, не трогаются.
+
+Панель управления экрана по умолчанию занимает 443 и 80. Шаг «Перенести панель на 8443» меняет порт панели
+(System › Settings › Administration) и отключает её редирект с 80; страница сама откроется по новому адресу.
+Проброс портов 80/443 на внутренний сервер (если был) нужно удалить, иначе запросы идут мимо WAF: страница
+предупреждает об этом.
+
+Файлы: `src/opnsense/mvc/app/models/OPNsense/JkUfw/{Waf.xml,Waf.php,Publish.php}`,
+`src/opnsense/mvc/app/controllers/OPNsense/JkUfw/{WafController.php,Api/WafController.php}`,
+`src/opnsense/mvc/app/views/OPNsense/JkUfw/waf.volt`, меню и ACL в `models/OPNsense/JkUfw/{Menu,ACL}`.
+
+```sh
+fetch -o /tmp/try-waf.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-waf.sh
+sh /tmp/try-waf.sh                 # или: sh /tmp/try-waf.sh <ветка>
+sh /tmp/try-waf.sh --remove        # убрать (сначала выключите WAF на странице и нажмите «Применить»)
+```
+
+## 22. Защита почты
+
+Страница **Services › Mail Protection** (`/ui/jkufw/mail`). Почтовый шлюз перед почтовым сервером внутри сети:
+почта из интернета приходит на экран (порт 25), проверяется и только потом передаётся серверу. Проверки: спам
+(SPF, DKIM, DMARC, списки блокировки, Bayes), вирусы во вложениях (ClamAV, базы обновляются сами), опасные вложения
+(.exe, .js, .vbs, .lnk, .iso, макросы Office и др.), фишинговые ссылки (OpenPhish), отложенная доставка
+(greylisting), строгие проверки SMTP. Пороги «пометить как спам» и «отклонить» задаются ползунками. Можно пускать
+через шлюз и исходящую почту (в сервере указать экран как smart host). На странице: счётчики, последние письма с
+вердиктом и причинами, состояние служб, очередь, версия антивирусных баз.
+
+Работа делается стандартными модулями: `os-postfix` (приём и пересылка по доменам), `os-rspamd` (антиспам, milter),
+`os-clamav` (антивирус), `os-redis` (для greylisting); страница ставит недостающие. Применение пишет их настройки
+и правило `[jk-ufw mail]` для порта 25. Домены, добавленные в Postfix вручную, не трогаются. Пока rspamd недоступен,
+Postfix временно отказывает (tempfail), так что непроверенная почта не проходит, а отправители повторят позже.
+
+В DNS MX-запись домена должна указывать на внешний адрес экрана, имя шлюза совпадать с MX и PTR. Проброс порта 25
+на внутренний сервер нужно удалить (страница предупреждает).
+
+Файлы: `src/opnsense/mvc/app/models/OPNsense/JkUfw/{Mail.xml,Mail.php,Publish.php}`,
+`src/opnsense/mvc/app/controllers/OPNsense/JkUfw/{MailController.php,Api/MailController.php}`,
+`src/opnsense/mvc/app/views/OPNsense/JkUfw/mail.volt`, меню и ACL в `models/OPNsense/JkUfw/{Menu,ACL}`.
+
+```sh
+fetch -o /tmp/try-mail.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-mail.sh
+sh /tmp/try-mail.sh                 # или: sh /tmp/try-mail.sh <ветка>
+sh /tmp/try-mail.sh --remove        # убрать (сначала выключите защиту на странице и нажмите «Применить»)
+```

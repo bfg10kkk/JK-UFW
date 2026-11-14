@@ -1,0 +1,99 @@
+<model>
+    <mount>//OPNsense/JkUfw/waf</mount>
+    <version>1.0.0</version>
+    <description>jk-ufw WAF: web application firewall in front of internal web servers (nginx + NAXSI)</description>
+    <items>
+        <general>
+            <enabled type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </enabled>
+            <!-- interfaces the protected sites are published on (pass rules for the two ports) -->
+            <interfaces type="CSVListField">
+                <Default>wan</Default>
+                <Mask>/^[a-z0-9_]{1,32}$/</Mask>
+                <MaskPerItem>Y</MaskPerItem>
+            </interfaces>
+            <http_port type="PortField">
+                <Default>80</Default>
+                <Required>Y</Required>
+            </http_port>
+            <https_port type="PortField">
+                <Default>443</Default>
+                <Required>Y</Required>
+            </https_port>
+            <!-- addresses never checked or blocked (office, monitoring, own scanners) -->
+            <trusted type="CSVListField">
+                <Mask>/^[0-9a-fA-F:.\/]{2,43}$/</Mask>
+                <MaskPerItem>Y</MaskPerItem>
+                <ValidationMessage>Enter IP addresses or networks, for example 203.0.113.7 or 10.0.0.0/8.</ValidationMessage>
+            </trusted>
+            <!-- uuids of the nginx HTTP servers written by apply (they have no description to mark them) -->
+            <managed type="CSVListField"/>
+        </general>
+        <sites>
+            <site type="ArrayField">
+                <enabled type="BooleanField">
+                    <Default>1</Default>
+                    <Required>Y</Required>
+                </enabled>
+                <!-- public names of the site, comma separated -->
+                <domains type="CSVListField">
+                    <Required>Y</Required>
+                    <Mask>/^(\*\.)?([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/</Mask>
+                    <MaskPerItem>Y</MaskPerItem>
+                    <ValidationMessage>Enter domain names, for example shop.example.com.</ValidationMessage>
+                </domains>
+                <!-- internal server: http(s)://host[:port] -->
+                <backend type="TextField">
+                    <Required>Y</Required>
+                    <Mask>/^https?:\/\/[a-zA-Z0-9.\-]{1,253}(:[0-9]{1,5})?\/?$/</Mask>
+                    <ValidationMessage>Enter the internal address, for example http://192.168.1.20:8080.</ValidationMessage>
+                </backend>
+                <certificate type="CertificateField">
+                    <Required>N</Required>
+                </certificate>
+                <https_only type="BooleanField">
+                    <Default>1</Default>
+                    <Required>Y</Required>
+                </https_only>
+                <!-- block: drop attacks; detect: only log them (learning mode, for the first days) -->
+                <mode type="OptionField">
+                    <Required>Y</Required>
+                    <Default>detect</Default>
+                    <OptionValues>
+                        <block>Block</block>
+                        <detect>Detect only</detect>
+                    </OptionValues>
+                </mode>
+                <rules type="OptionField">
+                    <Multiple>Y</Multiple>
+                    <Default>sqli,xss,traversal,rfi,evade,uploads</Default>
+                    <OptionValues>
+                        <sqli>SQL injection</sqli>
+                        <xss>Cross site scripting</xss>
+                        <traversal>Directory traversal</traversal>
+                        <rfi>Remote file inclusion</rfi>
+                        <evade>Evasion tricks</evade>
+                        <uploads>Dangerous uploads</uploads>
+                    </OptionValues>
+                </rules>
+                <bots type="BooleanField">
+                    <Default>1</Default>
+                    <Required>Y</Required>
+                </bots>
+                <websocket type="BooleanField">
+                    <Default>0</Default>
+                    <Required>Y</Required>
+                </websocket>
+                <max_body type="IntegerField">
+                    <Default>20</Default>
+                    <MinimumValue>1</MinimumValue>
+                    <MaximumValue>4096</MaximumValue>
+                    <Required>Y</Required>
+                </max_body>
+                <description type="DescriptionField"/>
+            </site>
+        </sites>
+    </items>
+</model>

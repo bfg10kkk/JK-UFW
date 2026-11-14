@@ -1,0 +1,95 @@
+<model>
+    <mount>//OPNsense/JkUfw/mail</mount>
+    <version>1.0.0</version>
+    <description>jk-ufw mail protection: SMTP gateway in front of internal mail servers (Postfix + rspamd + ClamAV)</description>
+    <items>
+        <general>
+            <enabled type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </enabled>
+            <!-- name the gateway greets other servers with; should match the MX record and reverse DNS -->
+            <hostname type="HostnameField">
+                <Required>N</Required>
+            </hostname>
+            <interfaces type="CSVListField">
+                <Default>wan</Default>
+                <Mask>/^[a-z0-9_]{1,32}$/</Mask>
+                <MaskPerItem>Y</MaskPerItem>
+            </interfaces>
+            <!-- rspamd score from which a message is refused / marked as spam -->
+            <reject_score type="IntegerField">
+                <Default>15</Default>
+                <MinimumValue>5</MinimumValue>
+                <MaximumValue>100</MaximumValue>
+                <Required>Y</Required>
+            </reject_score>
+            <spam_score type="IntegerField">
+                <Default>6</Default>
+                <MinimumValue>2</MinimumValue>
+                <MaximumValue>99</MaximumValue>
+                <Required>Y</Required>
+            </spam_score>
+            <antivirus type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </antivirus>
+            <greylist type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </greylist>
+            <attachments type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </attachments>
+            <phishing type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </phishing>
+            <strict type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </strict>
+            <!-- internal servers may also send outgoing mail through the gateway (it is checked too) -->
+            <outbound type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </outbound>
+            <max_size type="IntegerField">
+                <Default>50</Default>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>1024</MaximumValue>
+                <Required>Y</Required>
+            </max_size>
+            <!-- senders (addresses or domains) that are never marked as spam -->
+            <allow_senders type="CSVListField">
+                <Mask>/^[a-zA-Z0-9._%+\-@]{3,254}$/</Mask>
+                <MaskPerItem>Y</MaskPerItem>
+            </allow_senders>
+            <!-- postfix domain names written by us, so apply can take out the ones removed here -->
+            <managed type="CSVListField"/>
+        </general>
+        <domains>
+            <domain type="ArrayField">
+                <enabled type="BooleanField">
+                    <Default>1</Default>
+                    <Required>Y</Required>
+                </enabled>
+                <domain type="TextField">
+                    <Required>Y</Required>
+                    <Mask>/^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/</Mask>
+                    <ValidationMessage>Enter a mail domain, for example example.com.</ValidationMessage>
+                </domain>
+                <server type="HostnameField">
+                    <Required>Y</Required>
+                    <IpAllowed>Y</IpAllowed>
+                </server>
+                <port type="PortField">
+                    <Default>25</Default>
+                    <Required>Y</Required>
+                </port>
+                <description type="DescriptionField"/>
+            </domain>
+        </domains>
+    </items>
+</model>

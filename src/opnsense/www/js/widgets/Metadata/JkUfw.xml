@@ -322,4 +322,30 @@
             <nobody>Сейчас никто не подключён</nobody>
         </translations>
     </jkufwguest>
+    <jkufwsdwan>
+        <filename>JkUfwSdwan.js</filename>
+        <link>/ui/jkufw/sdwan</link>
+        <endpoints>
+            <endpoint>/api/jkufw/sdwan/status</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: SD-WAN</title>
+            <loading>Загрузка…</loading>
+            <error>Нет данных</error>
+            <off>SD-WAN выключен</off>
+            <links>Каналов</links>
+            <enable>Включить</enable>
+            <balance>Балансировка</balance>
+            <failover>Резерв</failover>
+            <online>В сети</online>
+            <of>из</of>
+            <down>нет связи</down>
+            <ms>мс</ms>
+            <loss>потери</loss>
+            <active>в работе</active>
+            <went_down>пропал</went_down>
+            <came_back>восстановлен</came_back>
+            <none>Нет интернет-каналов</none>
+        </translations>
+    </jkufwsdwan>
 </metadata>

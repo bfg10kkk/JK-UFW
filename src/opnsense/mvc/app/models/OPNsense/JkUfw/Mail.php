@@ -52,9 +52,9 @@ class Mail extends BaseModel
     {
         $messages = parent::performValidation($validateFullModel);
 
-        if ((int)(string)$this->general->spam_score >= (int)(string)$this->general->reject_score) {
+        if ((int)(string)$this->general->spam_score + 2 > (int)(string)$this->general->reject_score) {
             $messages->appendMessage(new Message(
-                gettext('The "mark as spam" score must be lower than the "refuse" score.'),
+                gettext('The "mark as spam" score must be at least 2 lower than the "refuse" score.'),
                 'general.spam_score'
             ));
         }

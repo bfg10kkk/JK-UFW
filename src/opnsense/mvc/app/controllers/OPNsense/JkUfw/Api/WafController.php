@@ -376,6 +376,7 @@ class WafController extends ApiMutableModelControllerBase
                     'disable_bot_protection' => (string)$site->bots == '1' ? '0' : '1',
                     'naxsi_whitelist_srcip' => $trusted,
                     'enable_acme_support' => '1',
+                    'verify_client' => 'off', // the plugin's default "Off" is not one of its own options
                 ]);
                 $servers[] = $srv->getAttributes()['uuid'];
                 $count++;
@@ -387,7 +388,14 @@ class WafController extends ApiMutableModelControllerBase
 
         $msgs = $ngx->performValidation();
         foreach ($msgs as $msg) {
-            /* only the objects written above are new, so a message here is about one of our sites */
+            /*
+             * Links between the new objects (server -> location -> upstream -> upstream server) are checked
+             * against the saved config, where they do not exist yet; we set them ourselves, so skip those.
+             * Anything else is about a value of one of our sites.
+             */
+            if (preg_match('/\.(serverentries|upstream|locations|custom_policy)$/', $msg->getField())) {
+                continue;
+            }
             throw new UserException(sprintf('nginx: %s (%s)', $msg->getMessage(), $msg->getField()), 'WAF');
         }
         $ngx->serializeToConfig(false, true);

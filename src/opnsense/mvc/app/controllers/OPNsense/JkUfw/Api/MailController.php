@@ -343,7 +343,12 @@ class MailController extends ApiMutableModelControllerBase
                     'rejectscore' => (string)$g->reject_score,
                     'headerscore' => (string)$spam,
                     'greylistscore' => $grey ? (string)max(1, $spam - 2) : '',
-                    'subjectscore' => '',
+                    /*
+                     * The plugin writes add_header only together with a subject score, so mark the subject of
+                     * clear spam halfway between "mark as spam" and "refuse".
+                     */
+                    'subjectscore' => (string)intdiv($spam + (int)(string)$g->reject_score + 1, 2),
+                    'rewritesubject' => '[SPAM]',
                     'enable_redis_plugin' => $grey ? '1' : (string)$rs->general->enable_redis_plugin,
                 ],
                 'milter_headers' => ['enabled' => '1', 'enable_spamd_bar' => '1', 'enable_authentication_results' => '1'],

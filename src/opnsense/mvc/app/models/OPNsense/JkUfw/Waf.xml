@@ -28,6 +28,8 @@
                 <MaskPerItem>Y</MaskPerItem>
                 <ValidationMessage>Enter IP addresses or networks, for example 203.0.113.7 or 10.0.0.0/8.</ValidationMessage>
             </trusted>
+            <!-- uuids of the nginx HTTP servers written by apply (they have no description to mark them) -->
+            <managed type="CSVListField"/>
         </general>
         <sites>
             <site type="ArrayField">

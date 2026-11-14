@@ -17,6 +17,7 @@
         </WireGuard>
     </VPN>
     <Firewall>
+        <AttackProtection VisibleName="Attack Protection" order="4" url="/ui/jkufw/ddos" cssClass="fa fa-shield fa-fw" />
         <Geoblock VisibleName="Country Blocking" order="5" url="/ui/firewall/geoblock" cssClass="fa fa-globe fa-fw" />
         <ContentFilter VisibleName="Content Filter" order="45" url="/ui/jkufw/parental" cssClass="fa fa-child fa-fw" />
     </Firewall>

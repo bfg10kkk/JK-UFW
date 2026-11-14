@@ -34,6 +34,7 @@
 | **Уведомления в Telegram** | System › Settings › Notifications | Сообщения об угрозах, пропадании интернета и входах в веб-интерфейс ([настройка](jk-ufw/features/notify.md)) |
 | **Гостевая сеть** | Services › Captive Portal › Guest Network | Отдельная VLAN для гостей со своей страницей входа, изоляцией и ограничением скорости |
 | **Мастер первой настройки** | System › Wizard | Интернет, локальная сеть, пароль и защита за четыре шага |
+| **Защита от атак** | Firewall › Attack Protection | Защита от DDoS (лимиты на адрес, чёрный список, SYN cookies, график атак), списки угроз (IoC), экспорт журналов в SIEM (CEF, JSON) |
 
 | Защита от угроз | Устройства | VPN |
 |---|---|---|
@@ -46,6 +47,10 @@
 | Гостевая сеть | Страница входа для гостей | Мастер настройки |
 |---|---|---|
 | ![](jk-ufw/screenshots/features/guest.png) | ![](jk-ufw/screenshots/features/guest-login.png) | ![](jk-ufw/screenshots/features/setup.png) |
+
+| Защита от DDoS | Списки угроз | Экспорт в SIEM |
+|---|---|---|
+| ![](jk-ufw/screenshots/features/ddos.png) | ![](jk-ufw/screenshots/features/ioc.png) | ![](jk-ufw/screenshots/features/siem.png) |
 
 ## Установка
 

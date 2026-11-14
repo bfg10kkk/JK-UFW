@@ -339,7 +339,7 @@
             <protected>Защищено</protected>
             <hint>DDoS, списки угроз, SIEM</hint>
             <enable>Включить</enable>
-            <blocked>Заблокировано</blocked>
+            <blocked>Блок-лист</blocked>
             <ips>IP</ips>
             <dropped>Отброшено</dropped>
             <pps>пак/с</pps>

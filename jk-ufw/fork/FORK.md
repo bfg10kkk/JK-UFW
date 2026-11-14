@@ -284,3 +284,67 @@ fetch -o /tmp/try-setup.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/sta
 sh /tmp/try-setup.sh                 # или: sh /tmp/try-setup.sh <ветка>
 sh /tmp/try-setup.sh --remove        # вернуть исходный мастер
 ```
+
+## 18. Контроль приложений и проверка HTTPS
+
+Страница **Firewall › Application Control** (`/ui/jkufw/appcontrol`) и новый блок «Для всей сети» на странице
+**Firewall › Content Filter**. Закрывает два пункта требований к NGFW: распознавание приложений (App Control) и
+веб-фильтр, который нельзя обойти через свой DNS.
+
+- **Распознавание** работает в штатном Suricata (Services › Intrusion Detection), отдельный DPI-движок не нужен.
+  Каталог `scripts/jkufw/appcatalog.json`: 59 приложений в 9 категориях (мессенджеры, соцсети, видео, игры,
+  файлообмен, удалённый доступ, VPN, облака, ИИ). Каждое описано именами серверов (поддомены тоже: TLS SNI,
+  HTTP Host, QUIC SNI), сетями адресов (Telegram), протоколами Suricata (SSH, RDP, VNC, Telnet, IKE, BitTorrent DHT),
+  портами (TeamViewer, AnyDesk, RustDesk, OpenVPN) и сигнатурами пакетов (рукопожатие BitTorrent, WireGuard).
+  Номер `n` в каталоге входит в sid правил — не меняйте его у существующих приложений.
+- **Применение**: `Api/AppcontrolController::apply` запускает в фоне `scripts/jkufw/appcontrol.py apply`, который пишет
+  `/usr/local/etc/suricata/rules/jkufw-appcontrol.rules` (штатный `installRules.py` подхватывает его сам),
+  наборы данных `/usr/local/etc/suricata/jkufw/*.lst` + `conf.d/jkufw-appcontrol.yaml` и перезагружает Suricata
+  (правила — сигналом USR2, изменённые списки — перезапуском). Заблокированное приложение — правило `drop`, остальные
+  при включённой статистике — `alert` без `msg` (не чаще раза в 5 минут на устройство). Без `msg` правила не видят
+  политики OPNsense, поэтому политика «все alert → drop» со страницы «Защита от угроз» их не превращает в блокировку.
+  Статистика за сутки берётся из `/var/log/suricata/eve.json` по диапазонам sid:
+  `97nnkkk` приложения, `98ccxxx` категории сайтов, `9890xxx` DoH, `9899xxx` разрешённые сайты (pass).
+- **Нужен IPS** (режим netmap). Страница показывает, если он выключен, работает как IDS или слушает только WAN, и
+  включает его на LAN одной кнопкой. На LAN запреты видят адрес каждого устройства; на WAN за NAT — нет. Для IPS
+  отключите аппаратную разгрузку (Interfaces › Settings).
+- **Проверка HTTPS по имени сайта** (`sni_filter`): категории и свой список «Всегда блокировать» профиля «Вся сеть»
+  фильтра контента сверяются с именем сервера в TLS/HTTP/QUIC. Списки те же, что у Unbound (hagezi, oisd), скачиваются
+  в `/var/db/jkufw/lists` раз в сутки (крон `jkufw appcontrol.refresh`, 04:35); при ошибке загрузки остаётся прошлая
+  копия. Сверяется всё имя и его последние 2, 3 и 4 метки (Suricata `pcrexform` + `dataset:isset`).
+  «Всегда разрешать» превращается в правила `pass` и перекрывает всё остальное. Реклама по SNI не проверяется — это
+  дело DNS.
+- **Блокировка DNS через HTTPS/TLS/QUIC** (`block_doh`): псевдонимы `jkufw_appctl_doh` (70 адресов известных
+  резолверов), `jkufw_appctl_dohlist` (общий список dibdot/DoH-IP-blocklists, обновляется раз в сутки),
+  `jkufw_appctl_dohports` (443, 853, 8853) и плавающие правила reject с пометкой `[jk-ufw app]` — работают и без IPS.
+  Плюс правила IPS по 46 именам DoH-серверов и зоны NXDOMAIN в Unbound для `use-application-dns.net` (Firefox
+  сам выключает DoH) и `mask.icloud.com` (iCloud Private Relay) в `/usr/local/etc/unbound.opnsense.d/jkufw-appcontrol.conf`.
+- **Блокировка QUIC** (`block_quic`): reject UDP 443 из сети (кроме самого роутера). Браузеры переходят на TCP, где имя
+  сайта видно.
+- **Исключения** (`exempt`): эти адреса не проверяются ни правилами IPS, ни правилами DoH/QUIC.
+
+Ограничения (честно): приложение, которое ходит на общие адреса CDN без своего имени сервера, или браузер с
+Encrypted Client Hello (ECH) на сайтах за Cloudflare по SNI не распознать; браузер может переиспользовать уже открытое
+HTTP/2-соединение к общему сертификату (например, Google) для соседнего сервиса. Против ECH помогает блокировка DoH
+(без него браузеры ECH почти не включают) и категории DNS-фильтра. Tor распознаётся только по сайту и мостам torproject.org,
+OpenVPN — по стандартному порту.
+
+Также исправлено: применение расписаний родительского контроля удаляло *все* псевдонимы с префиксом `jkufw_`
+(в том числе `jkufw_geoblock`, `jkufw_private` гостевой сети). Теперь только свои (`jkufw_` + 12 hex-цифр).
+
+Файлы: `controllers/OPNsense/JkUfw/{AppcontrolController.php,Api/AppcontrolController.php}`,
+`models/OPNsense/JkUfw/{AppControl.xml,AppControl.php}`, `views/OPNsense/JkUfw/appcontrol.volt`,
+`scripts/jkufw/{appcatalog.json,appcontrol.py}`, действия в `service/conf/actions.d/actions_jkufw.conf`,
+крон в `etc/inc/plugins.inc.d/jkufw.inc`; изменены `parental.volt`, `Parental.php`, `Api/ParentalController.php`.
+
+Попробовать на работающем экране (под root):
+
+```sh
+fetch -o /tmp/try-appcontrol.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-appcontrol.sh
+sh /tmp/try-appcontrol.sh            # или: sh /tmp/try-appcontrol.sh <ветка или коммит>
+sh /tmp/try-appcontrol.sh --remove   # убрать (сначала выключите всё на страницах и нажмите «Применить»)
+```
+
+Проверка без экрана: `JKUFW_ROOT=/tmp/x python3 appcontrol.py apply` пишет все файлы под `/tmp/x` и не трогает службы;
+правила проверены `suricata -T` и прогоном pcap на Suricata 7.0.3 (SNI, HTTP Host, сети адресов, SSH к внешнему и
+локальному адресу, BitTorrent, WireGuard, DoH, исключения, разрешённый сайт).

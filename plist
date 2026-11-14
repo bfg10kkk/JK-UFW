@@ -410,8 +410,10 @@
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Interfaces/forms/dialogVlan.xml
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Interfaces/forms/dialogVxlan.xml
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Interfaces/forms/dialogWireless.xml
+/usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/Api/AppcontrolController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/Api/NotifyController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/Api/ParentalController.php
+/usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/AppcontrolController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/DevicesController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/NotifyController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/ParentalController.php
@@ -890,6 +892,8 @@
 /usr/local/opnsense/mvc/app/models/OPNsense/Interfaces/Wlan.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/ACL/ACL.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Menu/Menu.xml
+/usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/AppControl.php
+/usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/AppControl.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Notify.php
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Notify.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Parental.php
@@ -1071,6 +1075,7 @@
 /usr/local/opnsense/mvc/app/views/OPNsense/Interface/vlan.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Interface/vxlan.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Interface/wireless.volt
+/usr/local/opnsense/mvc/app/views/OPNsense/JkUfw/appcontrol.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/JkUfw/devices.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/JkUfw/notify.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/JkUfw/parental.volt
@@ -1377,6 +1382,8 @@
 /usr/local/opnsense/scripts/ipsec/saddelete.py
 /usr/local/opnsense/scripts/ipsec/spddelete.py
 /usr/local/opnsense/scripts/ipsec/updown_event.py
+/usr/local/opnsense/scripts/jkufw/appcatalog.json
+/usr/local/opnsense/scripts/jkufw/appcontrol.py
 /usr/local/opnsense/scripts/jkufw/notify.py
 /usr/local/opnsense/scripts/kea/del_kea_leases.py
 /usr/local/opnsense/scripts/kea/get_kea_leases.py

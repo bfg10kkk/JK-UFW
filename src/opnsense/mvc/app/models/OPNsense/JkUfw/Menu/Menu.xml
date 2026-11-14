@@ -19,6 +19,7 @@
     <Firewall>
         <Geoblock VisibleName="Country Blocking" order="5" url="/ui/firewall/geoblock" cssClass="fa fa-globe fa-fw" />
         <ContentFilter VisibleName="Content Filter" order="45" url="/ui/jkufw/parental" cssClass="fa fa-child fa-fw" />
+        <AppControl VisibleName="Application Control" order="46" url="/ui/jkufw/appcontrol" cssClass="fa fa-th-large fa-fw" />
     </Firewall>
     <System>
         <Settings>

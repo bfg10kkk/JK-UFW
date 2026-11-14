@@ -43,6 +43,16 @@ class Parental extends BaseModel
     const PREFIX = 'jkufw_';
     const RULE_TAG = '[jk-ufw]';
 
+    /**
+     * Aliases and schedules of this feature are named jkufw_<12 hex digits of the device uuid>. Other jk-ufw
+     * features use the same jkufw_ prefix (jkufw_geoblock, jkufw_private, jkufw_sdwan_*, jkufw_appctl_*), so
+     * only names of exactly this shape may be removed as stale.
+     */
+    public static function isOwnName($name)
+    {
+        return preg_match('/^' . self::PREFIX . '[0-9a-f]{12}$/', $name) === 1;
+    }
+
     public static function isMac($value)
     {
         return preg_match('/^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$/i', $value) === 1;

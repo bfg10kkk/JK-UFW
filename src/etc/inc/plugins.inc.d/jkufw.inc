@@ -27,13 +27,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
 
-/* jk-ufw: watcher for Telegram notifications, every minute while enabled */
+/*
+ * jk-ufw: watcher for Telegram notifications, every minute while enabled;
+ * category lists of the HTTPS web filter (application control), daily while it is on
+ */
 function jkufw_cron()
 {
     $jobs = [];
 
-    if (!(new \OPNsense\JkUfw\Notify())->enabled->isEmpty()) {
+    if (class_exists('\OPNsense\JkUfw\Notify') && !(new \OPNsense\JkUfw\Notify())->enabled->isEmpty()) {
         $jobs[]['autocron'] = ['/usr/local/sbin/configctl -d jkufw notify run', '*'];
+    }
+    if (class_exists('\OPNsense\JkUfw\AppControl') && !(new \OPNsense\JkUfw\AppControl())->sni_filter->isEmpty()) {
+        $jobs[]['autocron'] = ['/usr/local/sbin/configctl -d jkufw appcontrol.refresh', '35', '4'];
     }
 
     return $jobs;

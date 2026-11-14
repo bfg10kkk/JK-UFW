@@ -31,6 +31,7 @@
 | **VPN с QR-кодом** | VPN › WireGuard › Remote Access | Удалённый доступ через WireGuard: включается одной кнопкой, телефон подключается по QR-коду |
 | **Блокировка стран** | Firewall › Country Blocking | Выбор стран на карте мира, входящие, исходящие или оба направления (GeoIP) |
 | **Фильтр контента и родительский контроль** | Firewall › Content Filter | Блокировка рекламы, мошенников, 18+ и других категорий, расписание интернета для детских устройств |
+| **Контроль приложений** | Firewall › Application Control | Распознаёт ~60 приложений (Telegram, TikTok, YouTube, игры, торренты, VPN, удалённый доступ, ИИ) по имени сервера в TLS/QUIC, протоколу и сигнатурам (Suricata), блокирует выбранные, показывает, какое устройство чем пользуется. В фильтре контента: проверка HTTPS по имени сайта, блокировка DNS через HTTPS и QUIC |
 | **Уведомления в Telegram** | System › Settings › Notifications | Сообщения об угрозах, пропадании интернета и входах в веб-интерфейс ([настройка](jk-ufw/features/notify.md)) |
 | **Гостевая сеть** | Services › Captive Portal › Guest Network | Отдельная VLAN для гостей со своей страницей входа, изоляцией и ограничением скорости |
 | **Мастер первой настройки** | System › Wizard | Интернет, локальная сеть, пароль и защита за четыре шага |
@@ -46,6 +47,10 @@
 | Гостевая сеть | Страница входа для гостей | Мастер настройки |
 |---|---|---|
 | ![](jk-ufw/screenshots/features/guest.png) | ![](jk-ufw/screenshots/features/guest-login.png) | ![](jk-ufw/screenshots/features/setup.png) |
+
+| Контроль приложений |
+|---|
+| ![](jk-ufw/screenshots/features/appcontrol.png) |
 
 ## Установка
 
@@ -64,7 +69,7 @@ sh /tmp/try-all.sh --remove    # убрать всё
 ```
 
 Каждую функцию можно поставить и отдельно скриптом `jk-ufw/features/try-<имя>.sh` (ids, devices, vpn, geoblock,
-parental, notify, guest, setup). Перед установкой сделайте резервную копию настроек (System › Configuration › Backups).
+parental, appcontrol, notify, guest, setup). Перед установкой сделайте резервную копию настроек (System › Configuration › Backups).
 Обновление системы через System › Firmware перезаписывает эти файлы, после него запустите скрипт ещё раз.
 
 ## Структура репозитория

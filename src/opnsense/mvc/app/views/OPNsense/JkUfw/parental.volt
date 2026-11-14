@@ -271,8 +271,27 @@
           </div>
           <div class="jkp-row">
             <div class="rl"><div class="rn">Запретить сторонние DNS-серверы</div><div class="rd">Устройства не смогут обойти фильтр, прописав себе 8.8.8.8 или DNS over TLS:
-              запросы на порты 53 и 853 разрешены только к роутеру. Для DNS через HTTPS включите категорию «Обход фильтра».</div></div>
+              запросы на порты 53 и 853 разрешены только к роутеру. От DNS через HTTPS защищает переключатель ниже и категория «Обход фильтра».</div></div>
             <div class="jkp-sw" id="jkp-foreigndns" role="switch" tabindex="0"></div>
+          </div>
+          <div id="jkp-ac" style="display:none">
+          <div class="jkp-row" style="border-top:1px solid var(--b);padding-top:12px">
+            <div class="rl"><div class="rn">Проверять HTTPS по имени сайта</div><div class="rd">Категории и «Всегда блокировать» профиля «Вся сеть» проверяются ещё и в самом
+              соединении (имя сервера в TLS, HTTP и QUIC). Не помогут ни свой DNS, ни DNS через HTTPS, ни файл hosts. «Всегда разрешать» тоже действует.</div></div>
+            <div class="jkp-sw" id="jkp-sni" role="switch" tabindex="0"></div>
+          </div>
+          <div class="jkp-row">
+            <div class="rl"><div class="rn">Блокировать DNS через HTTPS и TLS</div><div class="rd">Закрывает доступ к публичным DoH/DoT/DoQ-серверам (Google, Cloudflare, Quad9,
+              AdGuard, Яндекс и ещё сотни из общего списка) по адресу и имени. Firefox и iCloud Private Relay сами отключают обход.</div></div>
+            <div class="jkp-sw" id="jkp-doh" role="switch" tabindex="0"></div>
+          </div>
+          <div class="jkp-row">
+            <div class="rl"><div class="rn">Блокировать QUIC (HTTP/3)</div><div class="rd">Браузеры и приложения переходят на обычный HTTPS, где фильтру лучше видно имя сайта.
+              Сайты продолжают открываться.</div></div>
+            <div class="jkp-sw" id="jkp-quic" role="switch" tabindex="0"></div>
+          </div>
+          <div class="jkp-note warn" id="jkp-ac-ips" style="display:none;margin:10px 0 0"><i class="fa fa-exclamation-triangle"></i><div>Проверка HTTPS работает в движке IPS, а он
+            сейчас не включён. Включите его на странице <a href="/ui/jkufw/appcontrol">Контроль приложений</a>. Блокировка DNS через HTTPS по адресам и QUIC работает и без него.</div></div>
           </div>
         </div>
       </div>
@@ -450,10 +469,12 @@ $(function () {
     const profileName = (p) => p.global ? 'Вся сеть' : (p.name || 'Без названия');
 
     async function loadFilter() {
-        const [list, ub, pc] = await Promise.all([
+        const [list, ub, pc, acg, acs] = await Promise.all([
             api('/api/unbound/settings/search_dnsbl'),
             api('/api/unbound/settings/get'),
-            api('/api/jkufw/parental/get').catch(() => null)
+            api('/api/jkufw/parental/get').catch(() => null),
+            api('/api/jkufw/appcontrol/get').catch(() => null),
+            api('/api/jkufw/appcontrol/status').catch(() => null)
         ]);
         const rows = (list && list.rows) || [];
         const profiles = [];
@@ -482,6 +503,12 @@ $(function () {
             profiles: profiles,
             safesearch: String(general.safesearch) === '1',
             foreignDns: String(pg.block_foreign_dns) === '1',
+            // HTTPS (SNI) check and DoH/QUIC blocking live in the application control feature (/api/jkufw/appcontrol)
+            ac: !!(acg && acg.appcontrol),
+            sni: !!(acg && acg.appcontrol && String(acg.appcontrol.sni_filter) === '1'),
+            doh: !!(acg && acg.appcontrol && String(acg.appcontrol.block_doh) === '1'),
+            quic: !!(acg && acg.appcontrol && String(acg.appcontrol.block_quic) === '1'),
+            ipsOn: !!(acs && acs.ids && acs.ids.enabled && acs.ids.ips),
             unboundOn: String(general.enabled) === '1'
         };
         state = clone(saved);
@@ -490,7 +517,7 @@ $(function () {
 
     const diffable = (s) => ({
         p: s.profiles.map((p) => [p.uuid, p.deleted, p.enabled, p.name, [...p.keys].sort(), p.nets, p.block, p.allow]),
-        s: s.safesearch, f: s.foreignDns
+        s: s.safesearch, f: s.foreignDns, ac: [s.sni, s.doh, s.quic]
     });
     const isDirty = () => state && saved && JSON.stringify(diffable(state)) !== JSON.stringify(diffable(saved));
 
@@ -532,6 +559,11 @@ $(function () {
         if (!$('#jkp-allow').is(':focus')) { $('#jkp-allow').val(p.allow.join('\n')); }
         $('#jkp-safesearch').toggleClass('on', state.safesearch);
         $('#jkp-foreigndns').toggleClass('on', state.foreignDns);
+        $('#jkp-ac').toggle(state.ac);
+        $('#jkp-sni').toggleClass('on', state.sni);
+        $('#jkp-doh').toggleClass('on', state.doh);
+        $('#jkp-quic').toggleClass('on', state.quic);
+        $('#jkp-ac-ips').toggle(state.sni && !state.ipsOn);
         $('#jkp-unbound-off').toggle(!state.unboundOn);
         const anyOn = state.profiles.some((x) => !x.deleted && x.enabled && x.keys.length);
         $('#jkp-logo').toggleClass('off', !anyOn);
@@ -637,10 +669,11 @@ $(function () {
         renderFilter();
     });
     $('#jkp-allow').on('input', function () { state.profiles[sel].allow = lines($(this).val()); renderFilter(); });
-    $('#jkp-safesearch, #jkp-foreigndns').on('click keydown', function (e) {
+    $('#jkp-safesearch, #jkp-foreigndns, #jkp-sni, #jkp-doh, #jkp-quic').on('click keydown', function (e) {
         if (busy || (e.type === 'keydown' && e.key !== ' ' && e.key !== 'Enter')) { return; }
         e.preventDefault();
-        if (this.id === 'jkp-safesearch') { state.safesearch = !state.safesearch; } else { state.foreignDns = !state.foreignDns; }
+        const key = {'jkp-safesearch': 'safesearch', 'jkp-foreigndns': 'foreignDns', 'jkp-sni': 'sni', 'jkp-doh': 'doh', 'jkp-quic': 'quic'}[this.id];
+        state[key] = !state[key];
         renderFilter();
     });
     $('#jkp-reset').on('click', () => { state = clone(saved); sel = 0; renderFilter(); });
@@ -697,6 +730,17 @@ $(function () {
             plan.push({t: 'Правила для сторонних DNS', st: '', fn: async () => {
                 saveOk(await api('/api/jkufw/parental/set', {parental: {general: {block_foreign_dns: state.foreignDns ? '1' : '0'}}}));
                 await api('/api/jkufw/parental/apply', {});
+            }});
+        }
+        const acChanged = state.sni !== saved.sni || state.doh !== saved.doh || state.quic !== saved.quic;
+        if (acChanged || (state.sni && changedProfiles.length)) {
+            plan.push({t: 'Проверка HTTPS и защита от обхода', st: '', fn: async () => {
+                if (acChanged) {
+                    saveOk(await api('/api/jkufw/appcontrol/set', {appcontrol: {sni_filter: state.sni ? '1' : '0',
+                        block_doh: state.doh ? '1' : '0', block_quic: state.quic ? '1' : '0'}}));
+                }
+                // rules are rebuilt in the background (category lists may be downloaded first)
+                await api('/api/jkufw/appcontrol/apply', {});
             }});
         }
         let cur = 0;

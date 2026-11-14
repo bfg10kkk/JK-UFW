@@ -1,0 +1,43 @@
+<model>
+    <mount>//OPNsense/JkUfw/appcontrol</mount>
+    <version>1.0.0</version>
+    <description>jk-ufw application control and HTTPS web filter (Suricata rules written by scripts/jkufw/appcontrol.py)</description>
+    <items>
+        <!-- recognise applications at all -->
+        <enabled type="BooleanField">
+            <Default>0</Default>
+            <Required>Y</Required>
+        </enabled>
+        <!-- also log applications that are not blocked, so the page can show who uses what -->
+        <visibility type="BooleanField">
+            <Default>1</Default>
+            <Required>Y</Required>
+        </visibility>
+        <!-- ids from scripts/jkufw/appcatalog.json -->
+        <blocked type="TextField">
+            <Mask>/^[a-z0-9_]{1,32}(,[a-z0-9_]{1,32})*$/</Mask>
+            <ValidationMessage>Unknown application.</ValidationMessage>
+        </blocked>
+        <!-- devices never checked (e.g. the administrator's PC) -->
+        <exempt type="CSVListField">
+            <Mask>/^([0-9]{1,3}(\.[0-9]{1,3}){3}(\/[0-9]{1,2})?|[0-9a-fA-F:]*:[0-9a-fA-F:.]+(\/[0-9]{1,3})?)$/</Mask>
+            <MaskPerItem>Y</MaskPerItem>
+            <ValidationMessage>Enter IP addresses or networks, separated by commas.</ValidationMessage>
+        </exempt>
+        <!-- Content Filter categories of the whole network, also checked in the TLS handshake (SNI) -->
+        <sni_filter type="BooleanField">
+            <Default>0</Default>
+            <Required>Y</Required>
+        </sni_filter>
+        <!-- public DNS over HTTPS / TLS / QUIC resolvers: addresses (firewall) and names (IPS) -->
+        <block_doh type="BooleanField">
+            <Default>0</Default>
+            <Required>Y</Required>
+        </block_doh>
+        <!-- UDP 443: browsers fall back to TCP, where the server name is visible -->
+        <block_quic type="BooleanField">
+            <Default>0</Default>
+            <Required>Y</Required>
+        </block_quic>
+    </items>
+</model>

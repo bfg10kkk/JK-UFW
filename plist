@@ -2249,6 +2249,7 @@
 /usr/local/opnsense/www/css/flags/flag-icon.scss
 /usr/local/opnsense/www/css/gridstack-extra.min.css
 /usr/local/opnsense/www/css/gridstack.min.css
+/usr/local/opnsense/www/css/jkufw-system.css
 /usr/local/opnsense/www/css/jqtree.css
 /usr/local/opnsense/www/css/jquery.bootgrid.css
 /usr/local/opnsense/www/css/nv.d3.css
@@ -2284,6 +2285,7 @@
 /usr/local/opnsense/www/js/d3.min.js
 /usr/local/opnsense/www/js/d3.min.js.LICENSE
 /usr/local/opnsense/www/js/gridstack-all.min.js
+/usr/local/opnsense/www/js/jkufw-system.js
 /usr/local/opnsense/www/js/jkufw-worldmap.js
 /usr/local/opnsense/www/js/jquery-3.5.1.min.js
 /usr/local/opnsense/www/js/jquery-sortable.js

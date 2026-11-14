@@ -1,0 +1,308 @@
+/*
+ * Copyright (c) 2026 jk8s and jk-ufw contributors
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+ * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * jk-ufw: one look for every page under the "System" and "Interfaces" menus, matching the jk-ufw
+ * feature pages (devices, threats, VPN, notifications, ...). Only restyles the stock
+ * markup; nothing here changes how a page works. Active only when <html> carries
+ * the class "jks" (set by jkufw-system.js for pages of the System menu).
+ */
+
+html.jks {
+  --jk-a: #e5202e; --jk-a2: #ff3b47; --jk-abg: rgba(229,32,46,.12);
+  --jk-s: #131316; --jk-s2: #18181c; --jk-h: #1e1e23; --jk-b: #232329; --jk-b2: #2e2e35;
+  --jk-t: #e8e8ec; --jk-m: #8d8d98; --jk-ok: #22c55e; --jk-warn: #f5a524;
+}
+
+/* ---------- page frame ---------- */
+html.jks .page-content-main > .container-fluid,
+html.jks .page-content-head > .container-fluid { max-width: 1320px; margin-left: 0; }
+html.jks .page-content-main section.col-xs-12 { color: var(--jk-t); }
+
+/* ---------- hero header (built by jkufw-system.js) ---------- */
+html.jks .page-content-head { position: static !important; background: transparent !important; backdrop-filter: none !important; padding: 22px 0 4px !important; margin-bottom: 0; }
+html.jks .page-content-head .list-inline { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin: 0; }
+html.jks .page-content-head .list-inline > li { padding: 0; }
+html.jks .page-content-head .list-inline > li:first-child { flex: 1 1 auto; min-width: 0; }
+html.jks .jks-hero { display: flex; align-items: center; gap: 16px; min-width: 0; }
+html.jks .jks-logo {
+  flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font-size: 22px; color: #fff;
+  background: linear-gradient(145deg, var(--jk-a2), #a5121c); box-shadow: 0 6px 24px rgba(229,32,46,.35);
+}
+html.jks .jks-hero-txt { min-width: 0; }
+html.jks .page-content-head h1.jks-title {
+  font-size: 22px !important; font-weight: 700 !important; letter-spacing: -.02em; margin: 0 !important; line-height: 1.25;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px;
+}
+html.jks .page-content-head h1.jks-title .menu-favorite-star { margin-left: 0; font-size: 14px; order: 3; }
+html.jks .jks-pill {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: var(--jk-s2); border: 1px solid var(--jk-b); color: var(--jk-t); letter-spacing: 0; white-space: nowrap;
+}
+html.jks .jks-pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--jk-a); box-shadow: 0 0 0 3px rgba(229,32,46,.18); }
+html.jks .jks-sub { color: var(--jk-m); margin-top: 3px; font-size: 13px; line-height: 1.45; }
+html.jks .jks-orig { color: #5d5d68; font-size: 11.5px; margin-top: 2px; }
+html.jks #service_status_container .btn { margin-left: 6px; }
+
+/* ---------- sibling pages: segmented switcher ---------- */
+html.jks .jks-nav { margin: 14px 0 2px; overflow-x: auto; scrollbar-width: none; }
+html.jks .jks-nav::-webkit-scrollbar { display: none; }
+html.jks .jks-seg { display: inline-flex; gap: 8px; white-space: nowrap; }
+html.jks .jks-seg a {
+  display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 999px; background: var(--jk-s2); border: 1px solid var(--jk-b);
+  color: var(--jk-m) !important; font-weight: 600; font-size: 12.5px; text-decoration: none !important; transition: border-color .15s, color .15s;
+}
+html.jks .jks-seg a:hover { color: #fff !important; border-color: var(--jk-b2); }
+html.jks .jks-seg a.sel { background: var(--jk-abg); border-color: var(--jk-a); color: #fff !important; }
+
+/* ---------- in-page tabs: same segmented look ---------- */
+html.jks .page-content-main .nav-tabs {
+  display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; margin: 14px 0 14px; border: 1px solid var(--jk-b) !important;
+  border-radius: 10px; background: var(--jk-s2) !important; max-width: 100%;
+}
+html.jks .page-content-main .nav-tabs:not(:has(> li)) { display: none; }
+html.jks .page-content-main .nav-tabs::before, html.jks .page-content-main .nav-tabs::after { display: none; }
+html.jks .page-content-main .nav-tabs > li { float: none; margin: 0; }
+html.jks .page-content-main .nav-tabs > li > a {
+  padding: 6px 13px !important; margin: 0 !important; border-radius: 7px !important; box-shadow: none !important;
+  font-weight: 600; font-size: 12.5px; line-height: 1.5; color: var(--jk-m) !important;
+}
+html.jks .page-content-main .nav-tabs > li > a:hover { background: var(--jk-h) !important; color: #fff !important; box-shadow: none !important; }
+html.jks .page-content-main .nav-tabs > li.active > a,
+html.jks .page-content-main .nav-tabs > li.active > a:hover,
+html.jks .page-content-main .nav-tabs > li.active > a:focus { background: var(--jk-a) !important; color: #fff !important; box-shadow: none !important; }
+html.jks .page-content-main .nav-tabs > li.active > a .text-muted, html.jks .page-content-main .nav-tabs > li.active > a i { color: #fff !important; }
+html.jks .page-content-main .nav-tabs > li.dropdown > a.dropdown-toggle { padding-right: 6px !important; }
+html.jks .page-content-main .nav-tabs > li > .btn.dropdown-toggle { background: transparent !important; border: 0 !important; color: var(--jk-m) !important; }
+
+/* ---------- cards ---------- */
+html.jks .page-content-main .content-box,
+html.jks .page-content-main .tab-content {
+  background: var(--jk-s) !important; border: 1px solid var(--jk-b) !important; border-radius: 12px !important;
+  box-shadow: none !important; margin-bottom: 16px; overflow: visible;
+}
+html.jks .page-content-main .tab-content > .tab-pane > .content-box,
+html.jks .page-content-main .content-box .content-box,
+html.jks .page-content-main .tab-content .tab-content,
+html.jks .page-content-main .content-box > .tab-content { border: 0 !important; background: transparent !important; margin: 0; border-radius: 0 !important; }
+html.jks .page-content-main .content-box-main { padding: 18px !important; }
+html.jks .page-content-main .table-responsive { border: 0 !important; margin: 0; }
+/* a box that holds several form sections shows each section as its own card */
+html.jks .page-content-main .jks-split { background: transparent !important; border: 0 !important; }
+html.jks .page-content-main .jks-split .table-responsive:not(.jks-tools),
+html.jks .page-content-main .jks-split > table,
+html.jks .page-content-main .jks-split > form > table {
+  background: var(--jk-s); border: 1px solid var(--jk-b) !important; border-radius: 12px; margin: 0 0 16px !important; overflow: hidden;
+}
+html.jks .page-content-main .jks-bare { background: transparent !important; border: 0 !important; }
+html.jks .page-content-main .jks-bare > .tab-pane:not(.jks-split) {
+  background: var(--jk-s); border: 1px solid var(--jk-b); border-radius: 12px; margin-bottom: 16px;
+}
+
+/* ---------- settings forms (MVC base_form + legacy tables) ---------- */
+html.jks .page-content-main table.table { margin: 0; background: transparent !important; }
+html.jks .page-content-main form table.table > tbody > tr > td,
+html.jks .page-content-main .opnsense_standard_table_form > tbody > tr > td {
+  background: transparent !important; border-top: 1px solid var(--jk-b) !important; padding: 13px 18px !important; vertical-align: top;
+}
+html.jks .page-content-main form table.table > tbody > tr:first-child > td,
+html.jks .page-content-main .opnsense_standard_table_form > tbody > tr:first-child > td { border-top: 0 !important; }
+html.jks .page-content-main form table.table-striped > tbody > tr:nth-of-type(odd) > td,
+html.jks .page-content-main .opnsense_standard_table_form.table-striped > tbody > tr:nth-of-type(odd) > td { background: transparent !important; }
+html.jks .page-content-main form table.table > tbody > tr:hover > td,
+html.jks .page-content-main .opnsense_standard_table_form > tbody > tr:hover > td { background: rgba(255,255,255,.012) !important; }
+/* section titles: like the cards' uppercase headings on the feature pages */
+html.jks .page-content-main form table.table > thead > tr > th,
+html.jks .page-content-main .opnsense_standard_table_form > thead > tr > th,
+html.jks .page-content-main .opnsense_standard_table_form > thead > tr > td,
+html.jks .page-content-main .opnsense_standard_table_form tr > td.listtopic {
+  background: transparent !important; border-bottom: 0 !important; padding: 18px 18px 6px !important;
+  color: var(--jk-m) !important; font-size: 13px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: .07em !important;
+}
+html.jks .page-content-main form table.table > thead > tr > th > div { font-size: 13px !important; padding: 0 !important; }
+html.jks .page-content-main form table.table > thead > tr > th b,
+html.jks .page-content-main .opnsense_standard_table_form > thead strong { font-weight: 700; color: var(--jk-m); }
+html.jks .page-content-main form table.table > thead > tr > th .fa,
+html.jks .page-content-main .opnsense_standard_table_form > thead .fa { color: var(--jk-a2); }
+html.jks .page-content-main form table.table > thead + tbody > tr:first-child > td { border-top: 0 !important; }
+html.jks .page-content-main .opnsense_standard_table_form > thead > tr > td strong,
+html.jks .page-content-main .opnsense_standard_table_form > thead > tr > td b { color: var(--jk-m) !important; font-weight: 700; }
+html.jks .page-content-main .opnsense_standard_table_form > thead > tr > td:last-child:not(:first-child) {
+  text-transform: none !important; letter-spacing: 0 !important; font-weight: 500 !important; font-size: 12px !important;
+}
+html.jks .page-content-main input[type="file"]::file-selector-button {
+  background: var(--jk-s2); color: var(--jk-t); border: 1px solid var(--jk-b2); border-radius: 8px; padding: 6px 12px; margin-right: 10px; font-weight: 600; cursor: pointer;
+}
+html.jks .page-content-main table.table tr.jks-head > td {
+  background: transparent !important; border-top: 0 !important; padding: 18px 18px 8px !important;
+}
+html.jks .page-content-main table.table tr.jks-head > td:first-child,
+html.jks .page-content-main table.table tr.jks-head > td:first-child strong {
+  color: var(--jk-m) !important; font-size: 13px; font-weight: 700 !important; text-transform: uppercase; letter-spacing: .07em;
+}
+html.jks .page-content-main table.table tr.jks-head > td:not(:first-child) { color: var(--jk-m); font-size: 12px; }
+html.jks .page-content-main table.table tr.jks-head + tr > td { border-top: 0 !important; }
+html.jks .page-content-main table.table:not(.opnsense_standard_table_form) input[type="checkbox"] { accent-color: var(--jk-a); margin-right: 6px; }
+/* labels and help */
+html.jks .page-content-main .control-label b,
+html.jks .page-content-main .opnsense_standard_table_form > tbody > tr > td:first-child { font-weight: 600; color: var(--jk-t); }
+html.jks .page-content-main .control-label .fa-info-circle,
+html.jks .page-content-main a.showhelp .fa { color: #5d5d68 !important; }
+html.jks .page-content-main a.showhelp:hover .fa { color: var(--jk-a2) !important; }
+html.jks .page-content-main .help-block,
+html.jks .page-content-main output.hidden,
+html.jks .page-content-main [data-for^="help_for"],
+html.jks .page-content-main .help-block small { color: var(--jk-m) !important; font-size: 12px; line-height: 1.5; margin-top: 6px; }
+html.jks .page-content-main td > div > span.fa-ellipsis-v,
+html.jks .page-content-main form table.table td > div > .fa-ellipsis-v { color: var(--jk-a2); }
+
+/* "advanced mode / full help" switches row: a quiet line above the cards */
+html.jks .page-content-main .jks-tools { background: transparent !important; border: 0 !important; margin: 0 0 6px !important; }
+html.jks .page-content-main .jks-tools td { border: 0 !important; padding: 0 4px 4px !important; background: transparent !important; color: var(--jk-m); }
+html.jks .page-content-main .jks-tools tr:hover > td { background: transparent !important; }
+
+/* ---------- inputs ---------- */
+html.jks .page-content-main .form-control,
+html.jks .page-content-main input[type="text"], html.jks .page-content-main input[type="password"],
+html.jks .page-content-main input[type="number"], html.jks .page-content-main input[type="email"],
+html.jks .page-content-main textarea, html.jks .page-content-main select,
+html.jks .modal .form-control, html.jks .modal textarea {
+  background-color: var(--jk-s2) !important; border: 1px solid var(--jk-b) !important; border-radius: 8px !important; color: var(--jk-t) !important;
+}
+html.jks .page-content-main .form-control:focus, html.jks .page-content-main input:focus, html.jks .page-content-main textarea:focus,
+html.jks .modal .form-control:focus { border-color: var(--jk-a) !important; box-shadow: 0 0 0 3px var(--jk-abg) !important; }
+html.jks .page-content-main .bootstrap-select > .dropdown-toggle,
+html.jks .modal .bootstrap-select > .dropdown-toggle { background: var(--jk-s2) !important; border: 1px solid var(--jk-b) !important; border-radius: 8px !important; }
+html.jks .page-content-main .tokenize > .tokens-container, html.jks .modal .tokenize > .tokens-container { background: var(--jk-s2) !important; border-color: var(--jk-b) !important; }
+html.jks .page-content-main .input-group-addon { background: var(--jk-s2) !important; border-color: var(--jk-b) !important; }
+
+/* ---------- buttons ---------- */
+html.jks .page-content-main .btn, html.jks .modal .btn { border-radius: 9px !important; font-weight: 600; }
+html.jks .page-content-main .btn-primary, html.jks .modal .btn-primary { font-weight: 700; box-shadow: 0 4px 14px rgba(229,32,46,.22) !important; }
+html.jks .page-content-main .btn-default, html.jks .modal .btn-default { background: var(--jk-s2) !important; border: 1px solid var(--jk-b) !important; }
+html.jks .page-content-main .btn-default:hover, html.jks .modal .btn-default:hover { background: var(--jk-h) !important; border-color: var(--jk-b2) !important; }
+html.jks .page-content-main .btn-xs { border-radius: 7px !important; padding: 3px 6px; }
+
+/* ---------- grids (Tabulator / UIBootgrid) ---------- */
+html.jks .page-content-main .bootgrid-header { padding: 14px 18px 12px !important; margin: 0 !important; }
+html.jks .page-content-main .bootgrid-header .search .form-control,
+html.jks .page-content-main .bootgrid-header .search .input-group-addon { height: 34px; }
+html.jks .page-content-main .bootgrid-header .search .input-group-addon { border-radius: 999px 0 0 999px !important; border-right: 0 !important; }
+html.jks .page-content-main .bootgrid-header .search .form-control { border-radius: 0 999px 999px 0 !important; border-left: 0 !important; }
+html.jks .page-content-main .bootgrid-header .actionBar .btn,
+html.jks .page-content-main .bootgrid-header .actionBar .btn-group > .btn { background: var(--jk-s2) !important; border: 1px solid var(--jk-b) !important; color: var(--jk-t) !important; }
+html.jks .page-content-main .tabulator { background: transparent !important; border-top: 1px solid var(--jk-b) !important; }
+html.jks .page-content-main .tabulator .tabulator-header,
+html.jks .page-content-main .tabulator .tabulator-header .tabulator-col { background: var(--jk-s) !important; }
+html.jks .page-content-main .tabulator .tabulator-header .tabulator-col .tabulator-col-content { padding: 10px 12px !important; }
+html.jks .page-content-main .tabulator .tabulator-header .tabulator-col .tabulator-col-title { color: var(--jk-m) !important; font-size: 11px; letter-spacing: .07em; font-weight: 700; }
+html.jks .page-content-main .tabulator-row { background: var(--jk-s) !important; border-bottom: 1px solid var(--jk-b) !important; min-height: 46px; }
+html.jks .page-content-main .tabulator-row.tabulator-row-even { background: var(--jk-s) !important; }
+html.jks .page-content-main .tabulator-row .tabulator-cell { padding: 13px 12px !important; }
+html.jks .page-content-main .tabulator .tabulator-frozen.tabulator-frozen-right { border-left: 0 !important; }
+html.jks .page-content-main .tabulator input[type="checkbox"] { accent-color: var(--jk-a); width: 15px; height: 15px; }
+html.jks .page-content-main .tabulator-row .tabulator-cell.tabulator-frozen { background: inherit !important; }
+html.jks .page-content-main .tabulator-row.tabulator-selectable:hover,
+html.jks .page-content-main .tabulator-row.tabulator-selectable:hover .tabulator-cell.tabulator-frozen { background: var(--jk-h) !important; }
+html.jks .page-content-main .tabulator-row.tabulator-selected,
+html.jks .page-content-main .tabulator-row.tabulator-selected .tabulator-cell.tabulator-frozen { background: var(--jk-abg) !important; }
+html.jks .page-content-main .tabulator-row.text-muted .tabulator-cell { color: #6d6d78; }
+html.jks .page-content-main .tabulator-row .btn-xs.btn-default {
+  background: transparent !important; border: 1px solid transparent !important; color: var(--jk-m) !important; box-shadow: none !important; margin: 0 1px;
+}
+html.jks .page-content-main .tabulator-row .btn-xs.btn-default:hover { background: var(--jk-h) !important; border-color: var(--jk-b2) !important; color: #fff !important; }
+html.jks .page-content-main .tabulator-row .command-delete:hover { color: var(--jk-a2) !important; }
+html.jks .page-content-main .tabulator-row .fa-check-square-o, html.jks .page-content-main .tabulator-row .fa-check { color: var(--jk-ok); }
+html.jks .page-content-main .tabulator-row .fa-square-o, html.jks .page-content-main .tabulator-row .fa-times { color: #55555f; }
+html.jks .page-content-main .tabulator-placeholder span, html.jks .page-content-main .tabulator .tabulator-tableholder .tabulator-placeholder .tabulator-placeholder-contents { color: var(--jk-m) !important; font-weight: 500; }
+html.jks .page-content-main .bootgrid-footer { padding: 12px 18px !important; margin: 0 !important; color: var(--jk-m); }
+html.jks .page-content-main .bootgrid-footer .pagination > li > a,
+html.jks .page-content-main .bootgrid-footer .pagination > li > span { border-radius: 7px !important; margin-right: 3px; min-width: 30px; text-align: center; }
+html.jks .page-content-main .bootgrid-footer .btn-primary { box-shadow: 0 4px 14px rgba(229,32,46,.25) !important; }
+/* plain read-only tables (firmware, status pages, legacy lists) */
+html.jks .page-content-main .content-box > table.table > thead > tr > th,
+html.jks .page-content-main .tab-pane > table.table > thead > tr > th,
+html.jks .page-content-main .tab-pane .table-responsive > table.table > thead > tr > th {
+  background: transparent !important; color: var(--jk-m) !important; font-size: 11px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; border-bottom: 1px solid var(--jk-b) !important; padding: 12px 18px !important;
+}
+html.jks .page-content-main .content-box > table.table > tbody > tr > td,
+html.jks .page-content-main .tab-pane > table.table > tbody > tr > td,
+html.jks .page-content-main .tab-pane .table-responsive > table.table > tbody > tr > td { padding: 11px 18px !important; background: transparent !important; }
+html.jks .page-content-main .table-striped > tbody > tr:nth-of-type(odd) > td { background: transparent !important; }
+
+/* ---------- notices ---------- */
+html.jks .page-content-main .alert {
+  border-radius: 10px !important; padding: 11px 13px 11px 40px; font-size: 12.5px; line-height: 1.5; position: relative;
+  background: var(--jk-s2) !important; border: 1px solid var(--jk-b) !important; color: var(--jk-m) !important;
+}
+html.jks .page-content-main .alert::before {
+  font-family: "Font Awesome 6 Free", FontAwesome; font-weight: 900; position: absolute; left: 14px; top: 11px; content: "\f05a"; color: var(--jk-m);
+}
+html.jks .page-content-main .alert-warning { background: rgba(245,165,36,.09) !important; border-color: rgba(245,165,36,.28) !important; color: #f3d39b !important; }
+html.jks .page-content-main .alert-warning::before { content: "\f071"; color: var(--jk-warn); }
+html.jks .page-content-main .alert-danger { background: var(--jk-abg) !important; border-color: rgba(229,32,46,.35) !important; color: #ffc4c8 !important; }
+html.jks .page-content-main .alert-danger::before { content: "\f06a"; color: var(--jk-a2); }
+html.jks .page-content-main .alert-success { background: rgba(34,197,94,.08) !important; border-color: rgba(34,197,94,.28) !important; color: #b6ecc9 !important; }
+html.jks .page-content-main .alert-success::before { content: "\f058"; color: var(--jk-ok); }
+html.jks .page-content-main .alert-info { color: var(--jk-m) !important; }
+html.jks .page-content-main .alert > .fa:first-child, html.jks .page-content-main .alert > i:first-child { display: none; }
+
+/* ---------- save / apply bar (sticky, like the feature pages) ---------- */
+html.jks .page-content-main .grid-bottom-reserve { position: sticky; bottom: 12px; z-index: 6; margin-top: 4px; }
+html.jks .page-content-main .grid-bottom-reserve > .alert.content-box,
+html.jks .page-content-main .jks-bar {
+  display: flex !important; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 18px !important; margin: 0 0 16px !important;
+  background: rgba(19,19,22,.92) !important; backdrop-filter: blur(8px); border: 1px solid var(--jk-b) !important; border-radius: 12px !important;
+  color: var(--jk-m) !important;
+}
+html.jks .page-content-main .grid-bottom-reserve > .alert.content-box::before,
+html.jks .page-content-main .jks-bar::before { display: none; }
+html.jks .page-content-main .jks-bar { position: sticky; bottom: 12px; z-index: 6; }
+html.jks .page-content-main .jks-bar > .btn + .btn { margin-left: 0 !important; }
+html.jks .page-content-main #change_message_base_form { color: var(--jk-warn); }
+
+/* ---------- labels / status chips ---------- */
+html.jks .page-content-main .label { border-radius: 999px !important; padding: 3px 9px; font-size: 11px; font-weight: 700; letter-spacing: .02em; }
+
+/* ---------- dialogs ---------- */
+html.jks .modal-content { border-radius: 14px !important; background: var(--jk-s) !important; }
+html.jks .modal-header { padding: 18px 20px !important; }
+html.jks .modal-header .modal-title { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+html.jks .modal-body table.table > tbody > tr > td { border-top: 1px solid var(--jk-b) !important; padding: 11px 14px !important; background: transparent !important; }
+html.jks .modal-body table.table > thead > tr > th { background: transparent !important; color: var(--jk-m) !important; font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+html.jks .modal-footer { padding: 14px 20px !important; }
+
+/* ---------- small screens ---------- */
+@media (max-width: 767px) {
+  html.jks .page-content-head { padding-top: 14px !important; }
+  html.jks .jks-logo { width: 44px; height: 44px; border-radius: 12px; font-size: 18px; }
+  html.jks .page-content-head h1.jks-title { font-size: 19px !important; }
+  html.jks .jks-sub { font-size: 12.5px; }
+  html.jks .jks-orig { display: none; }
+  html.jks .page-content-main .nav-tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; }
+  html.jks .page-content-main .nav-tabs > li > a { white-space: nowrap; }
+  html.jks .page-content-main form table.table > tbody > tr > td,
+  html.jks .page-content-main .opnsense_standard_table_form > tbody > tr > td { padding: 10px 14px !important; }
+}

@@ -23,6 +23,7 @@
     {% for filename in css_files -%}
     <link href="{{ cache_safe(theme_file_or_default(filename, theme_name)) }}" rel="stylesheet">
     {% endfor %}
+    <link href="{{ cache_safe('/ui/css/jkufw-system.css') }}" rel="stylesheet">
 
     <!-- TODO: move to theme style -->
     <style>
@@ -42,6 +43,8 @@
 
     <!-- theme JS -->
     <script src="{{ cache_safe(theme_file_or_default('/js/theme.js', theme_name)) }}"></script>
+    <!-- jk-ufw: shared look of the System pages -->
+    <script src="{{ cache_safe('/ui/js/jkufw-system.js') }}"></script>
 
     <script>
             // setup default scripting after page loading.
@@ -281,6 +284,7 @@
   <main class="page-content col-sm-9 col-sm-push-3 col-lg-10 col-lg-push-2">
       <!-- menu system -->
       {{ partial("layout_partials/base_menu_system") }}
+      <script>window.jkufwSystemMark && jkufwSystemMark();</script>
       <!-- menu favorites -->
       <span id="favorites-config" data-add-text="{{ lang._('Add Favorite') }}" data-remove-text="{{ lang._('Remove Favorite') }}" data-favorites="{{ menuFavorites | safe }}"></span>
       <div class="row">

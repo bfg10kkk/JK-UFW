@@ -169,6 +169,7 @@ $aclObj = new \OPNsense\Core\ACL();
             </nav>
         </div>
     </aside>
+    <script>window.jkufwSystemMark && jkufwSystemMark();</script>
   <div class="row">
     <header class="page-content-head">
       <div class="container-fluid">

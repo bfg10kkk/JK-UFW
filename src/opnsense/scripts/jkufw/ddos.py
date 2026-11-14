@@ -282,20 +282,21 @@ def cmd_tick():
         if cfg['enabled']:
             if diff('synflood') > 0 or diff('cookies') > 0:
                 log_event(events, 'syn', 'SYN flood: %d SYN cookies sent in the last minute' % diff('cookies'),
-                          count=diff('cookies'))
+                          code='syn', count=diff('cookies'))
             if usage > 0.8 and prev.get('states', 0) / (prev.get('limit') or limit or 1) <= 0.8:
-                log_event(events, 'attack', 'State table %d%% full (%d of %d)' % (usage * 100, sample['states'], limit))
+                log_event(events, 'attack', 'State table %d%% full (%d of %d)' % (usage * 100, sample['states'], limit),
+                          code='table', count=int(usage * 100))
             if prev.get('level') == 'attack' and level != 'attack':
-                log_event(events, 'ok', 'Attack is over')
+                log_event(events, 'ok', 'Attack is over', code='over')
             elif prev.get('level') != 'attack' and level == 'attack' and not (diff('synflood') or diff('cookies')):
                 log_event(events, 'attack', 'Attack: %s blocked packets per second' % sample['rate_block'],
-                          rate=sample['rate_block'])
+                          code='flood', count=sample['rate_block'])
     # addresses pf put on the list since the last run
     known = set(prev.get('addresses', [])) if prev else set()
     for e in entries:
         if e['address'] not in known and cfg['enabled']:
             log_event(events, 'block', 'Address %s blocked: crossed a connection limit' % e['address'],
-                      address=e['address'])
+                      code='limit', address=e['address'])
     sample['addresses'] = [e['address'] for e in entries][:500]
     if prev:
         prev.pop('addresses', None)
@@ -344,7 +345,7 @@ def cmd_block(address):
     pfctl('-t', TABLE, '-T', 'add', address)
     pfctl('-k', address)
     events = load_json(EVENTS, [])
-    log_event(events, 'block', 'Address %s blocked by hand' % address, address=address, manual=True)
+    log_event(events, 'block', 'Address %s blocked by hand' % address, code='manual', address=address)
     save_json(EVENTS, events[-KEEP_EVENTS:])
     print(json.dumps({'status': 'ok'}))
 
@@ -356,14 +357,16 @@ def cmd_unblock(address):
         if keep:
             pfctl('-t', TABLE, '-T', 'add', *keep)
         text = 'All automatically blocked addresses released'
+        code = 'release_all'
     elif valid_address(address):
         pfctl('-t', TABLE, '-T', 'delete', address)
         text = 'Address %s released by hand' % address
+        code = 'release'
     else:
         print(json.dumps({'status': 'failed', 'message': 'not an address'}))
         return
     events = load_json(EVENTS, [])
-    log_event(events, 'ok', text, address=address)
+    log_event(events, 'ok', text, code=code, address=address)
     save_json(EVENTS, events[-KEEP_EVENTS:])
     print(json.dumps({'status': 'ok'}))
 

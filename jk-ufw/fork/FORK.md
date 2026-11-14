@@ -284,3 +284,33 @@ fetch -o /tmp/try-setup.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/sta
 sh /tmp/try-setup.sh                 # или: sh /tmp/try-setup.sh <ветка>
 sh /tmp/try-setup.sh --remove        # вернуть исходный мастер
 ```
+
+## 16. Единый вид раздела «Система»
+
+Все страницы меню **System** (Access, Configuration, Firmware, Gateways, High Availability, Routes, Settings,
+Snapshots, Trust, Log Files, Diagnostics, в том числе старые PHP-страницы вроде `system_general.php`) выглядят так же,
+как страницы jk-ufw из разделов 7–14:
+
+- шапка с красной иконкой, русским названием, меткой «Система · <группа>» и одной строкой пояснения; исходный
+  английский заголовок остаётся мелким шрифтом, чтобы совпадать с документацией и форумами;
+- переключатель соседних страниц группы (например, Users · Groups · Privileges · Servers · Tester);
+- вкладки страницы в виде сегментов, разделы настроек отдельными карточками с заголовками капсом,
+  таблицы как на странице «Устройства», закреплённая внизу панель «Применить», заметки в стиле jk-ufw.
+
+Меняется только внешний вид: идентификаторы, формы, кнопки и API страниц не тронуты. Страницы с собственным
+дизайном (Notifications, мастер настройки) пропускаются.
+
+Файлы: `src/opnsense/www/css/jkufw-system.css`, `src/opnsense/www/js/jkufw-system.js` (новые) и по паре строк
+в `layouts/default.volt`, `src/www/head.inc`, `src/www/fbegin.inc`, которые подключают их и помечают страницы
+раздела классом `jks` сразу после вывода меню (без мигания). Русские названия и пояснения страниц задаются
+таблицей `PAGES` в начале `jkufw-system.js`. При слиянии с основным проектом конфликт возможен только в этих
+трёх строках: возьмите их версию и верните строки.
+
+Попробовать на работающем экране без пересборки образа (под root). Скрипт дописывает строки в файлы на месте
+(копии `*.jkufw-orig`), поэтому подходит к любой сборке 26.7:
+
+```sh
+fetch -o /tmp/try-system.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-system.sh
+sh /tmp/try-system.sh                 # или: sh /tmp/try-system.sh <ветка>
+sh /tmp/try-system.sh --remove        # вернуть прежний вид
+```

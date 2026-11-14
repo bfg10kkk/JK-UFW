@@ -121,6 +121,10 @@ $pagetitle .= html_safe(sprintf(' | %s.%s', $config['system']['hostname'], $conf
     <script src="<?= cache_safe(get_themed_filename('/js/theme.js')) ?>"></script>
 <?php endif ?>
 
+    <!-- jk-ufw: shared look of the System pages -->
+    <link rel="stylesheet" type="text/css" href="<?= cache_safe('/ui/css/jkufw-system.css') ?>">
+    <script src="<?= cache_safe('/ui/js/jkufw-system.js') ?>"></script>
+
     <script>
     //<![CDATA[
     $( document ).ready(function() {

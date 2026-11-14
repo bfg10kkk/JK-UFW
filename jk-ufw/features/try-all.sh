@@ -17,7 +17,7 @@ REPO="https://raw.githubusercontent.com/bfg10kkk/JK-UFW"
 BRANCH="${1:-stable/26.7}"
 SRC="$BRANCH"
 [ "$BRANCH" = "--remove" ] && SRC="${2:-stable/26.7}"
-FEATURES="ids devices vpn geoblock parental notify guest setup"
+FEATURES="ids devices vpn geoblock parental notify guest setup system"
 
 TMP=$(mktemp -d /tmp/jkufw-all.XXXXXX)
 trap 'rm -rf "$TMP"' EXIT
@@ -56,4 +56,5 @@ echo "  Content filter               /ui/jkufw/parental"
 echo "  Telegram notifications       /ui/jkufw/notify"
 echo "  Guest network                /ui/captiveportal/guest"
 echo "  Setup wizard                 /ui/core/initial_setup"
+echo "  System pages (new look)      every page under System"
 echo "Dashboard: + Add widget, the jk-ufw widgets are at the top of the list."

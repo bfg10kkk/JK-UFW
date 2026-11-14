@@ -26,6 +26,14 @@
         </patterns>
     </page-jkufw-parental>
     <!-- jk-ufw additions -->
+    <page-jkufw-appcontrol>
+        <name>Firewall: Application Control</name>
+        <patterns>
+            <pattern>ui/jkufw/appcontrol</pattern>
+            <pattern>api/jkufw/appcontrol/*</pattern>
+        </patterns>
+    </page-jkufw-appcontrol>
+    <!-- jk-ufw additions -->
     <page-jkufw-notify>
         <name>System: Settings: Notifications (Telegram)</name>
         <patterns>

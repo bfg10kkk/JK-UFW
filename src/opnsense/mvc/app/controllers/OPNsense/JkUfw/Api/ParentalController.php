@@ -47,7 +47,8 @@ use OPNsense\JkUfw\Parental;
  *   - rule       reject from jkufw_<id>              (floating, quick, right after it)
  * Outside the allowed hours the pass rule is unloaded and, as with any schedule, its states are killed,
  * so open connections drop too. A paused device gets only the reject rule.
- * Everything carrying the jkufw_ prefix or the [jk-ufw] rule tag is owned by this controller and rewritten on apply.
+ * Aliases and schedules named jkufw_<12 hex> and rules tagged "[jk-ufw] " are owned by this controller and rewritten on apply
+ * (other jk-ufw features share the jkufw_ prefix, see Parental::isOwnName()).
  */
 class ParentalController extends ApiMutableModelControllerBase
 {
@@ -224,7 +225,6 @@ class ParentalController extends ApiMutableModelControllerBase
 
     private function sync()
     {
-        $prefix = Parental::PREFIX;
         $tag = Parental::RULE_TAG;
         $mdl = $this->getModel();
         $cfg = Config::getInstance()->object();
@@ -237,7 +237,7 @@ class ParentalController extends ApiMutableModelControllerBase
         }
         $stale = [];
         foreach ($cfg->schedules->children() as $node) {
-            if (str_starts_with((string)$node->name, $prefix)) {
+            if (Parental::isOwnName((string)$node->name)) {
                 $stale[] = dom_import_simplexml($node);
             }
         }
@@ -267,7 +267,7 @@ class ParentalController extends ApiMutableModelControllerBase
         $aliases = new Alias();
         $byName = [];
         foreach ($aliases->aliases->alias->iterateItems() as $uuid => $alias) {
-            if (str_starts_with((string)$alias->name, $prefix)) {
+            if (Parental::isOwnName((string)$alias->name)) {
                 $byName[(string)$alias->name] = $uuid;
             }
         }
@@ -291,7 +291,7 @@ class ParentalController extends ApiMutableModelControllerBase
         $filter = new Filter();
         $remove = [];
         foreach ($filter->rules->rule->iterateItems() as $uuid => $rule) {
-            if (str_starts_with((string)$rule->description, $tag)) {
+            if (str_starts_with((string)$rule->description, $tag . ' ')) {
                 $remove[] = $uuid;
             }
         }

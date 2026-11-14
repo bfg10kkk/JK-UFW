@@ -32,7 +32,11 @@ add_after() {
     grep -qF "$3" "$1" && return 0
     grep -qF "$2" "$1" || { echo "!!! $1: anchor '$2' not found, skipped"; return 0; }
     [ -f "$1.jkufw-orig" ] || cp -p "$1" "$1.jkufw-orig"
-    awk -v pat="$2" -v txt="$4" '{ print } !done && index($0, pat) { print txt; done = 1 }' "$1" > "$1.jkufw-tmp"
+    # text goes through a file: FreeBSD awk refuses newlines in -v values
+    printf '%s\n' "$4" > "$1.jkufw-txt"
+    awk -v pat="$2" -v txt="$1.jkufw-txt" \
+        '{ print } !done && index($0, pat) { while ((getline l < txt) > 0) print l; done = 1 }' "$1" > "$1.jkufw-tmp"
+    rm -f "$1.jkufw-txt"
     cat "$1.jkufw-tmp" > "$1" && rm -f "$1.jkufw-tmp"
 }
 

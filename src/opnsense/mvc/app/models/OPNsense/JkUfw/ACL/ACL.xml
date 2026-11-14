@@ -33,4 +33,35 @@
             <pattern>api/jkufw/notify/*</pattern>
         </patterns>
     </page-jkufw-notify>
+    <!-- jk-ufw additions -->
+    <page-jkufw-waf>
+        <name>Firewall: Web Protection (WAF)</name>
+        <description>Protected websites behind the nginx plugin with NAXSI; installs os-nginx and reconfigures it</description>
+        <patterns>
+            <pattern>ui/jkufw/waf</pattern>
+            <pattern>api/jkufw/waf/*</pattern>
+            <pattern>api/nginx/service/reconfigure</pattern>
+            <pattern>api/core/firmware/install/os-nginx</pattern>
+            <pattern>api/core/firmware/upgradestatus</pattern>
+        </patterns>
+    </page-jkufw-waf>
+    <!-- jk-ufw additions -->
+    <page-jkufw-mail>
+        <name>Services: Mail Protection</name>
+        <description>Mail gateway: Postfix relay, rspamd antispam, ClamAV antivirus, Redis greylisting</description>
+        <patterns>
+            <pattern>ui/jkufw/mail</pattern>
+            <pattern>api/jkufw/mail/*</pattern>
+            <pattern>api/postfix/service/reconfigure</pattern>
+            <pattern>api/rspamd/service/reconfigure</pattern>
+            <pattern>api/clamav/service/reconfigure</pattern>
+            <pattern>api/clamav/service/freshclam</pattern>
+            <pattern>api/redis/service/reconfigure</pattern>
+            <pattern>api/core/firmware/install/os-postfix</pattern>
+            <pattern>api/core/firmware/install/os-rspamd</pattern>
+            <pattern>api/core/firmware/install/os-clamav</pattern>
+            <pattern>api/core/firmware/install/os-redis</pattern>
+            <pattern>api/core/firmware/upgradestatus</pattern>
+        </patterns>
+    </page-jkufw-mail>
 </acl>

@@ -58,8 +58,8 @@ class Waf extends BaseModel
         'rfi' => ['OBVIOUS RFI', [1100, 1199]],
         'traversal' => ['Directory traversal', [1200, 1299]],
         'xss' => ['Cross Site Scripting', [1300, 1399]],
-        'evade' => ['Evading tricks', [1400, 1500]],
-        'uploads' => ['File uploads', [1501, 1600]],
+        'evade' => ['Evading tricks', [1400, 1499]],
+        'uploads' => ['File uploads', [1500, 1600]],
     ];
 
     /**

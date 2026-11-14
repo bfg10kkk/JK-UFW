@@ -107,6 +107,18 @@ outputs:
              tagged-packets: yes
 {% endif %}
 
+{# jk-ufw antivirus: files matched by jkufw-av.rules are written here and analysed by scripts/jkufw/av.py #}
+{% if not helpers.empty('OPNsense.JkUfw.antivirus.files.enabled') %}
+  - file-store:
+      version: 2
+      enabled: yes
+      dir: /var/log/suricata/filestore
+      write-fileinfo: yes
+      force-hash: [sha256, md5]
+      stream-depth: 0
+      max-open-files: 1000
+{% endif %}
+
   - stats:
       enabled: yes
       filename: stats.log

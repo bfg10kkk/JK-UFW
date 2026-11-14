@@ -284,3 +284,52 @@ fetch -o /tmp/try-setup.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/sta
 sh /tmp/try-setup.sh                 # или: sh /tmp/try-setup.sh <ветка>
 sh /tmp/try-setup.sh --remove        # вернуть исходный мастер
 ```
+
+## 18. Антивирус и песочница
+
+Страница **Firewall › Antivirus & Sandbox** (`/ui/jkufw/antivirus`). Закрывает пункты «потоковый антивирус» и
+«песочница» из требований к NGFW. Два пути проверки и общий блок-лист:
+
+1. **Веб-загрузки на лету.** Прозрачный прокси Squid отдаёт каждый ответ через ICAP в c-icap, тот — в ClamAV.
+   Заражённый файл не доходит до компьютера, вместо него страница-предупреждение. Нужны стандартные плагины
+   `os-squid`, `os-c-icap`, `os-clamav`: страница ставит их сама при первом включении. Кнопка «Применить» настраивает
+   все три плагина, включает прозрачный режим и создаёт перенаправления `jk-ufw AV: ...` (Firewall › NAT ›
+   Port Forward) с выбранных сетей: порт 80 → 127.0.0.1:3128, при проверке HTTPS ещё 443 → 3129 (сам экран
+   исключён). Для HTTPS нужен свой центр сертификации (System › Trust › Authorities), его сертификат ставится на
+   устройства как доверенный; банки и госуслуги вписываются в «Не вскрывать».
+2. **Файлы из трафика.** Suricata (страница «Угрозы») вырезает файлы нужных типов из HTTP, SMTP, FTP, SMB и NFS:
+   правила `jkufw-av.rules` с `file.magic` + `filestore` и выход `file-store` в шаблоне `suricata.yaml` (включается
+   только с этой функцией). Скрипт `scripts/jkufw/av.py` каждую минуту (cron из `plugins.inc.d/jkufw_av.inc`)
+   забирает файлы в карантин `/var/db/jkufw/av/files`, проверяет ClamAV (через сокет clamd), по хешу в MalwareBazaar
+   и VirusTotal (нужны бесплатные ключи; уходит только хеш) и, если настроено, отправляет в песочницу: своя
+   **CAPEv2** или **Cuckoo** по REST API (файлы не покидают сеть) или **VirusTotal** (файл уходит в облако). Отчёт
+   песочницы (оценка 0–10, семейство, что делал файл) виден в карточке файла. Зашифрованный трафик (HTTPS, IMAPS)
+   так не виден — для веба его закрывает путь 1.
+
+Вредоносный хеш (при включённой «Блокировать найденное») попадает в блок-лист: ClamAV получает базу
+`/var/db/clamav/jkufw-blocked.hsb` (прокси больше не пропустит этот файл), Suricata — правило `filesha256`
+со списком `/var/db/jkufw/av/bad-sha256.txt` (в режиме IPS передача файла обрывается, в IDS — только событие).
+Файл можно проверить и вручную: перетащить на страницу (до 64 МБ) или вставить MD5 / SHA-1 / SHA-256.
+
+Правка в ядре: `scripts/suricata/installRules.py` не применяет политики к файлам `jkufw-*.rules` — иначе политика
+IPS `jk-ufw: block threats` (без фильтра наборов) превратила бы правила извлечения в `drop` и рвала бы все загрузки.
+
+Честные ограничения: настоящий динамический анализ на самом экране невозможен (нужны виртуальные машины Windows),
+поэтому песочница — внешняя: своя CAPEv2 на отдельном сервере или облако. Без ключей и песочницы файлы из трафика
+проверяет только ClamAV. Крупные файлы (больше лимита) пропускаются без проверки.
+
+Файлы: `src/opnsense/mvc/app/{controllers,models,views}/OPNsense/JkUfw/*Antivirus*`, `antivirus.volt`,
+`src/opnsense/scripts/jkufw/av.py`, `src/opnsense/service/conf/actions.d/actions_jkufw_av.conf`,
+`src/etc/inc/plugins.inc.d/jkufw_av.inc`, блок в `src/opnsense/service/templates/OPNsense/IDS/suricata.yaml`,
+правка `src/opnsense/scripts/suricata/installRules.py`, пункт меню и ACL в `models/OPNsense/JkUfw/{Menu,ACL}`.
+
+Попробовать на работающем экране без пересборки образа (под root):
+
+```sh
+fetch -o /tmp/try-av.sh https://raw.githubusercontent.com/bfg10kkk/JK-UFW/stable/26.7/jk-ufw/features/try-av.sh
+sh /tmp/try-av.sh                 # или: sh /tmp/try-av.sh <ветка или коммит>
+sh /tmp/try-av.sh --remove        # убрать (сначала выключите обе проверки на странице и нажмите «Применить»)
+```
+
+Проверка: на компьютере в сети откройте `http://` ссылку на тестовый файл EICAR (например, с сайта eicar.org,
+версия по HTTP) — прокси должен показать предупреждение, а в «Последних угрозах» появится запись.

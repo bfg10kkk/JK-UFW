@@ -25,6 +25,7 @@
 /usr/local/etc/inc/plugins.inc.d/ipfw.inc
 /usr/local/etc/inc/plugins.inc.d/ipsec.inc
 /usr/local/etc/inc/plugins.inc.d/jkufw.inc
+/usr/local/etc/inc/plugins.inc.d/jkufw_ddos.inc
 /usr/local/etc/inc/plugins.inc.d/kea.inc
 /usr/local/etc/inc/plugins.inc.d/loopback.inc
 /usr/local/etc/inc/plugins.inc.d/monit.inc
@@ -410,8 +411,10 @@
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Interfaces/forms/dialogVlan.xml
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Interfaces/forms/dialogVxlan.xml
 /usr/local/opnsense/mvc/app/controllers/OPNsense/Interfaces/forms/dialogWireless.xml
+/usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/Api/DdosController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/Api/NotifyController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/Api/ParentalController.php
+/usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/DdosController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/DevicesController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/NotifyController.php
 /usr/local/opnsense/mvc/app/controllers/OPNsense/JkUfw/ParentalController.php
@@ -889,6 +892,8 @@
 /usr/local/opnsense/mvc/app/models/OPNsense/Interfaces/Wlan.php
 /usr/local/opnsense/mvc/app/models/OPNsense/Interfaces/Wlan.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/ACL/ACL.xml
+/usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Ddos.php
+/usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Ddos.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Menu/Menu.xml
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Notify.php
 /usr/local/opnsense/mvc/app/models/OPNsense/JkUfw/Notify.xml
@@ -1071,6 +1076,7 @@
 /usr/local/opnsense/mvc/app/views/OPNsense/Interface/vlan.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Interface/vxlan.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/Interface/wireless.volt
+/usr/local/opnsense/mvc/app/views/OPNsense/JkUfw/ddos.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/JkUfw/devices.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/JkUfw/notify.volt
 /usr/local/opnsense/mvc/app/views/OPNsense/JkUfw/parental.volt
@@ -1377,6 +1383,7 @@
 /usr/local/opnsense/scripts/ipsec/saddelete.py
 /usr/local/opnsense/scripts/ipsec/spddelete.py
 /usr/local/opnsense/scripts/ipsec/updown_event.py
+/usr/local/opnsense/scripts/jkufw/ddos.py
 /usr/local/opnsense/scripts/jkufw/notify.py
 /usr/local/opnsense/scripts/kea/del_kea_leases.py
 /usr/local/opnsense/scripts/kea/get_kea_leases.py
@@ -1534,6 +1541,7 @@
 /usr/local/opnsense/service/conf/actions.d/actions_ipfw.conf
 /usr/local/opnsense/service/conf/actions.d/actions_ipsec.conf
 /usr/local/opnsense/service/conf/actions.d/actions_jkufw.conf
+/usr/local/opnsense/service/conf/actions.d/actions_jkufw_ddos.conf
 /usr/local/opnsense/service/conf/actions.d/actions_kea.conf
 /usr/local/opnsense/service/conf/actions.d/actions_monit.conf
 /usr/local/opnsense/service/conf/actions.d/actions_netflow.conf
@@ -1613,6 +1621,8 @@
 /usr/local/opnsense/service/templates/OPNsense/IPFW/rules.macro
 /usr/local/opnsense/service/templates/OPNsense/IPsec/+TARGETS
 /usr/local/opnsense/service/templates/OPNsense/IPsec/reqid_events.conf
+/usr/local/opnsense/service/templates/OPNsense/JkUfw/Siem/+TARGETS
+/usr/local/opnsense/service/templates/OPNsense/JkUfw/Siem/jkufw-siem.conf
 /usr/local/opnsense/service/templates/OPNsense/Kea/+TARGETS
 /usr/local/opnsense/service/templates/OPNsense/Kea/kea-ctrl-agent.conf
 /usr/local/opnsense/service/templates/OPNsense/Kea/kea-dhcp4.conf
@@ -1642,6 +1652,7 @@
 /usr/local/opnsense/service/templates/OPNsense/Syslog/local/gateways.conf
 /usr/local/opnsense/service/templates/OPNsense/Syslog/local/hostwatch.conf
 /usr/local/opnsense/service/templates/OPNsense/Syslog/local/ipsec.conf
+/usr/local/opnsense/service/templates/OPNsense/Syslog/local/jkufw_ddos.conf
 /usr/local/opnsense/service/templates/OPNsense/Syslog/local/kea.conf
 /usr/local/opnsense/service/templates/OPNsense/Syslog/local/lighttpd.conf
 /usr/local/opnsense/service/templates/OPNsense/Syslog/local/monit.conf
@@ -2329,6 +2340,7 @@
 /usr/local/opnsense/www/js/widgets/IpsecTunnels.js
 /usr/local/opnsense/www/js/widgets/JkUfwClients.js
 /usr/local/opnsense/www/js/widgets/JkUfwCommon.js
+/usr/local/opnsense/www/js/widgets/JkUfwDdos.js
 /usr/local/opnsense/www/js/widgets/JkUfwDns.js
 /usr/local/opnsense/www/js/widgets/JkUfwGeoblock.js
 /usr/local/opnsense/www/js/widgets/JkUfwGuest.js

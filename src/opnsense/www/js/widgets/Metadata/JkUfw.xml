@@ -322,4 +322,34 @@
             <nobody>Сейчас никто не подключён</nobody>
         </translations>
     </jkufwguest>
+    <jkufwddos>
+        <filename>JkUfwDdos.js</filename>
+        <link>/ui/jkufw/ddos</link>
+        <endpoints>
+            <endpoint>/api/jkufw/ddos/status</endpoint>
+        </endpoints>
+        <translations>
+            <title>jk-ufw: защита от атак</title>
+            <loading>Загрузка…</loading>
+            <error>Нет данных</error>
+            <off>Защита выключена</off>
+            <calm>Спокойно</calm>
+            <elevated>Повышенная активность</elevated>
+            <attack>Идёт атака</attack>
+            <protected>Защищено</protected>
+            <hint>DDoS, списки угроз, SIEM</hint>
+            <enable>Включить</enable>
+            <blocked>Заблокировано</blocked>
+            <ips>IP</ips>
+            <dropped>Отброшено</dropped>
+            <pps>пак/с</pps>
+            <states>Соединения</states>
+            <ev_limit>заблокирован</ev_limit>
+            <ev_manual>заблокирован вручную</ev_manual>
+            <ev_syn>SYN-флуд отражён</ev_syn>
+            <ev_flood>Флуд</ev_flood>
+            <ev_table>Таблица соединений</ev_table>
+            <ev_over>Атака закончилась</ev_over>
+        </translations>
+    </jkufwddos>
 </metadata>

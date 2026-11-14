@@ -23,7 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * jk-ufw: one look for every page under the "System" menu, matching the jk-ufw
+ * jk-ufw: one look for every page under the "System" and "Interfaces" menus, matching the jk-ufw
  * feature pages (devices, threats, VPN, notifications, ...). Only restyles the stock
  * markup; nothing here changes how a page works. Active only when <html> carries
  * the class "jks" (set by jkufw-system.js for pages of the System menu).

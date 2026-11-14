@@ -34,7 +34,7 @@
 | **Уведомления в Telegram** | System › Settings › Notifications | Сообщения об угрозах, пропадании интернета и входах в веб-интерфейс ([настройка](jk-ufw/features/notify.md)) |
 | **Гостевая сеть** | Services › Captive Portal › Guest Network | Отдельная VLAN для гостей со своей страницей входа, изоляцией и ограничением скорости |
 | **Мастер первой настройки** | System › Wizard | Интернет, локальная сеть, пароль и защита за четыре шага |
-| **Единый вид раздела «Система»** | все страницы System | Шапка с иконкой и пояснением, переключатель соседних страниц, карточки, вкладки-сегменты и закреплённая панель «Применить», как на страницах выше |
+| **Единый вид разделов «Система» и «Интерфейсы»** | все страницы System и Interfaces | Шапка с иконкой и пояснением, переключатель соседних страниц, карточки, вкладки-сегменты и закреплённая панель «Применить», как на страницах выше |
 
 | Защита от угроз | Устройства | VPN |
 |---|---|---|
@@ -48,9 +48,9 @@
 |---|---|---|
 | ![](jk-ufw/screenshots/features/guest.png) | ![](jk-ufw/screenshots/features/guest-login.png) | ![](jk-ufw/screenshots/features/setup.png) |
 
-| Система › Пользователи | Система › Общие настройки | Система › Журналы |
+| Система › Пользователи | Система › Общие настройки | Интерфейсы › VLAN |
 |---|---|---|
-| ![](jk-ufw/screenshots/system/users.png) | ![](jk-ufw/screenshots/system/general.png) | ![](jk-ufw/screenshots/system/log.png) |
+| ![](jk-ufw/screenshots/system/users.png) | ![](jk-ufw/screenshots/system/general.png) | ![](jk-ufw/screenshots/system/vlan.png) |
 
 ## Установка
 

@@ -1,5 +1,5 @@
 #!/bin/sh
-# jk-ufw: give every page of the "System" menu the look of the jk-ufw feature pages
+# jk-ufw: give every page of the "System" and "Interfaces" menus the look of the jk-ufw feature pages
 # (hero header, section switcher, cards, segmented tabs, sticky apply bar) on a running firewall,
 # without rebuilding the image. Run as root on the firewall (console option 8 "Shell", or over SSH):
 #
@@ -73,5 +73,5 @@ add_after $FBEGIN '/ui/js/opnsense_favorites.js' jkufwSystemMark \
 clear_caches
 
 echo
-echo "Done. Open any page under System, e.g. https://<firewall>/ui/auth/user"
+echo "Done. Open any page under System or Interfaces, e.g. https://<firewall>/ui/auth/user"
 echo "Note: a core update (System > Firmware) overwrites the patched files; run this script again after it."

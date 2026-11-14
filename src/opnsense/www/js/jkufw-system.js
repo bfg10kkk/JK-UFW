@@ -23,10 +23,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * jk-ufw: shared look for the pages of the "System" menu (see css/jkufw-system.css).
+ * jk-ufw: shared look for the pages of the "System" and "Interfaces" menus (see css/jkufw-system.css).
  *
  * jkufwSystemMark() runs right after the menu is printed (default.volt, fbegin.inc) and adds
- * class "jks" to <html> when the selected menu entry lives under System, so the styles
+ * class "jks" to <html> when the selected menu entry lives under one of SECTIONS, so the styles
  * apply before the page is painted. On DOM ready the page header becomes the same hero as
  * on the jk-ufw feature pages (icon, title, one line of explanation) and the sibling pages
  * of the current group get a segmented switcher. Only presentation: no ids, forms, buttons
@@ -39,7 +39,17 @@
     /* pages that already have their own jk-ufw design */
     var SKIP = ['/ui/jkufw/notify', '/ui/core/initial_setup'];
 
+    /* top level menus that get the look: menu id -> name shown in the header pill */
+    var SECTIONS = { System: 'Система', Interfaces: 'Интерфейсы' };
+    var root = null;
+
     var GROUPS = {
+        /* Interfaces */
+        Devices: ['Виртуальные устройства', 'fa-archive'],
+        Neighbors: ['Соседи', 'fa-users'],
+        VIP: ['Виртуальные IP', 'fa-clone'],
+        Wireless: ['Wi-Fi', 'fa-wifi'],
+        /* System */
         Access: ['Доступ', 'fa-users'],
         Configuration: ['Конфигурация', 'fa-history'],
         Firmware: ['Обновления', 'fa-cloud-download'],
@@ -92,7 +102,35 @@
         ['/ui/diagnostics/log/core/lighttpd', 'fa-globe', 'Журнал веб-сервера', 'Запросы и ошибки веб-интерфейса.'],
         ['/ui/core/service', 'fa-cubes', 'Службы', 'Запуск, остановка и перезапуск системных служб.'],
         ['/ui/diagnostics/activity', 'fa-tasks', 'Активность', 'Процессы и загрузка процессора в реальном времени.'],
-        ['/ui/diagnostics/system', 'fa-bar-chart', 'Статистика', 'Память, буферы сети и другие показатели ядра.']
+        ['/ui/diagnostics/system', 'fa-bar-chart', 'Статистика', 'Память, буферы сети и другие показатели ядра.'],
+        /* Interfaces */
+        ['/ui/interfaces/assignment', 'fa-plug', 'Назначение портов', 'Какой сетевой порт или VLAN работает как WAN, LAN и другие сети. Новые порты добавляются здесь.'],
+        ['/ui/interfaces/overview', 'fa-tasks', 'Обзор интерфейсов', 'Состояние каждого интерфейса: адреса, скорость, ошибки и трафик.'],
+        ['/ui/interfaces/settings', 'fa-cogs', 'Настройки сети', 'Аппаратная разгрузка (CRC, TSO, LRO), IPv6 и прочие общие параметры сетевых карт.'],
+        ['/ui/interfaces/bridge', 'fa-link', 'Мосты', 'Объединение нескольких портов в одну сеть, как в обычном коммутаторе.'],
+        ['/ui/interfaces/gif', 'fa-exchange', 'Туннели GIF', 'Туннели IPv6-в-IPv4 и IPv4-в-IPv6 до другого маршрутизатора.'],
+        ['/ui/interfaces/gre', 'fa-exchange', 'Туннели GRE', 'Туннели GRE до другого маршрутизатора или провайдера.'],
+        ['/ui/interfaces/lagg', 'fa-compress', 'Агрегация каналов', 'Несколько портов как один: больше скорость и резерв (LACP, failover).'],
+        ['/ui/interfaces/loopback', 'fa-repeat', 'Loopback', 'Виртуальные интерфейсы без физического порта, для служб и маршрутизации.'],
+        ['/interfaces_ppps', 'fa-phone', 'PPP-подключения', 'PPPoE, PPTP, L2TP и модемы: подключения к провайдеру по логину и паролю.'],
+        ['/ui/interfaces/vlan', 'fa-tags', 'VLAN', 'Виртуальные сети поверх одного порта: гостевая, камеры, умный дом.'],
+        ['/ui/interfaces/vxlan', 'fa-tags', 'VXLAN', 'Расширенные виртуальные сети поверх IP.'],
+        ['/ui/interfaces/neighbor', 'fa-address-book', 'Статические соседи', 'Постоянные записи ARP и NDP: какой MAC-адрес у какого IP.'],
+        ['/ui/hostdiscovery', 'fa-search', 'Обнаружение устройств', 'Автоматический поиск устройств в сетях по ARP и NDP.'],
+        ['/ui/diagnostics/log/core/hostwatch', 'fa-file-text-o', 'Журнал обнаружения', 'Когда и какие новые устройства появились в сети.'],
+        ['/ui/interfaces/vip', 'fa-clone', 'Виртуальные IP', 'Дополнительные адреса на интерфейсах: алиасы, CARP, Proxy ARP.'],
+        ['/ui/diagnostics/interface/vip', 'fa-heartbeat', 'Состояние виртуальных IP', 'Кто сейчас владеет адресами CARP: основной или резервный экран.'],
+        ['/ui/interfaces/wireless', 'fa-wifi', 'Wi-Fi адаптеры', 'Беспроводные клоны интерфейсов: точка доступа или клиент.'],
+        ['/status_wireless.php', 'fa-wifi', 'Состояние Wi-Fi', 'Подключённые клиенты и найденные сети.'],
+        ['/ui/diagnostics/interface/arp', 'fa-table', 'Таблица ARP', 'Какие устройства IPv4 сейчас видны в сетях: IP, MAC, производитель.'],
+        ['/ui/diagnostics/interface/ndp', 'fa-table', 'Таблица NDP', 'То же для IPv6: соседи и их MAC-адреса.'],
+        ['/ui/diagnostics/interface/netstat', 'fa-list-alt', 'Netstat', 'Сокеты, статистика протоколов и буферов.'],
+        ['/ui/diagnostics/dns_diagnostics', 'fa-search', 'Проверка DNS', 'Разрешение имени через системные DNS-серверы.'],
+        ['/ui/diagnostics/packet_capture', 'fa-filter', 'Захват пакетов', 'Запись трафика интерфейса в файл pcap для Wireshark.'],
+        ['/ui/diagnostics/ping', 'fa-bullseye', 'Ping', 'Проверка, отвечает ли узел, и задержка до него.'],
+        ['/ui/diagnostics/portprobe', 'fa-plug', 'Проверка порта', 'Открыт ли TCP-порт на удалённом узле.'],
+        ['/ui/diagnostics/traceroute', 'fa-road', 'Трассировка', 'Через какие узлы идут пакеты до адреса.'],
+        ['/interfaces.php', 'fa-sitemap', '', 'Адрес, тип подключения (DHCP, статический, PPPoE), MTU и параметры порта.']
     ];
 
     function lookup(path) {
@@ -111,9 +149,11 @@
             if (SKIP.some(function (s) { return path.indexOf(s) === 0; })) {
                 return;
             }
-            if (document.querySelector('#System.active-menu') !== null) {
-                document.documentElement.classList.add('jks');
-            }
+            Object.keys(SECTIONS).forEach(function (id) {
+                if (document.querySelector('#' + id + '.active-menu') !== null) {
+                    document.documentElement.classList.add('jks');
+                }
+            });
         } catch (e) { /* styling only */ }
     };
 
@@ -129,20 +169,24 @@
         }
         var path = window.location.pathname;
         var page = lookup(path);
-        /* group from the menu: #System_<Group> holds the selected entry */
-        var $grp = $('#System > .collapse.active-menu').first();
-        var gid = ($grp.attr('id') || '').replace(/^System_/, '');
-        var $active = $('#System a.list-group-item.active').first();
-        var group = gid ? (GROUPS[gid] || [$('[href="#System_' + gid + '"]').text().trim(), 'fa-server']) : ['', 'fa-server'];
+        /* group from the menu: #<Section>_<Group> holds the selected entry */
+        var $grp = $('#' + root + ' > .collapse.active-menu').first();
+        var gid = ($grp.attr('id') || '').replace(root + '_', '');
+        var $active = $('#' + root + ' a.list-group-item.active').first();
+        var group = gid ? (GROUPS[gid] || [$('[href="#' + root + '_' + gid + '"]').text().trim(), 'fa-server']) : ['', 'fa-server'];
+        if (gid && $active.length === 0) {
+            $active = $grp.find('a.list-group-item.active').first();
+        }
         var orig = $.trim($h1.clone().children().remove().end().text());
-        var title = page ? page[2] : ($active.text().trim() || orig);
+        /* interfaces.php?if=lan: the title is the interface's own name from the menu, "[LAN]" -> "LAN" */
+        var title = (page && page[2]) ? page[2] : ($active.text().trim().replace(/^\[(.*)\]$/, '$1') || orig);
         var icon = page ? page[1] : group[1];
         var sub = page ? page[3] : '';
 
         var $star = $h1.find('.menu-favorite-star').detach();
         $h1.addClass('jks-title').empty()
             .append($('<span/>').text(title))
-            .append('<span class="jks-pill"><i></i>Система' + (group[0] ? ' · ' + esc(group[0]) : '') + '</span>')
+            .append('<span class="jks-pill"><i></i>' + esc(SECTIONS[root]) + (group[0] ? ' · ' + esc(group[0]) : '') + '</span>')
             .append($star);
         var $txt = $('<div class="jks-hero-txt"/>').append($h1);
         if (sub) {
@@ -158,7 +202,7 @@
     }
 
     function siblings() {
-        var $grp = $('#System > .collapse.active-menu').first();
+        var $grp = $('#' + root + ' > .collapse.active-menu').first();
         if ($grp.length === 0) {
             return;
         }
@@ -235,6 +279,9 @@
         if (!document.documentElement.classList.contains('jks')) {
             return;
         }
+        root = Object.keys(SECTIONS).filter(function (id) {
+            return $('#' + id + '.active-menu').length > 0;
+        })[0] || 'System';
         try { hero(); } catch (e) { /* presentation only */ }
         try { siblings(); } catch (e) { /* presentation only */ }
         try { cards(); } catch (e) { /* presentation only */ }

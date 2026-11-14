@@ -33,4 +33,13 @@
             <pattern>api/jkufw/notify/*</pattern>
         </patterns>
     </page-jkufw-notify>
+    <!-- jk-ufw additions -->
+    <page-jkufw-sdwan>
+        <name>Lobby: SD-WAN</name>
+        <description>Several internet links: health checks, failover, load balancing and traffic routes</description>
+        <patterns>
+            <pattern>ui/jkufw/sdwan</pattern>
+            <pattern>api/jkufw/sdwan/*</pattern>
+        </patterns>
+    </page-jkufw-sdwan>
 </acl>

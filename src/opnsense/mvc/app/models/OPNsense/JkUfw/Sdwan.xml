@@ -1,0 +1,151 @@
+<model>
+    <mount>//OPNsense/JkUfw/sdwan</mount>
+    <version>1.0.0</version>
+    <description>jk-ufw SD-WAN: several internet links, health checks, failover / load balancing and per-app routing</description>
+    <items>
+        <general>
+            <enabled type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </enabled>
+            <!-- failover: one link at a time, in the order of "members"; balance: all healthy links at once, by weight -->
+            <mode type="OptionField">
+                <Required>Y</Required>
+                <Default>failover</Default>
+                <OptionValues>
+                    <failover>Failover</failover>
+                    <balance>Load balancing</balance>
+                </OptionValues>
+            </mode>
+            <!-- gateway names, in priority order (first = preferred) -->
+            <members type="CSVListField">
+                <Mask>/^[a-zA-Z0-9_\-]{1,32}$/</Mask>
+                <MaskPerItem>Y</MaskPerItem>
+                <ValidationMessage>Unknown link.</ValidationMessage>
+            </members>
+            <!-- when a link counts as broken (same values as a gateway group trigger) -->
+            <trigger type="OptionField">
+                <Required>Y</Required>
+                <Default>downloss</Default>
+                <OptionValues>
+                    <down>Member Down</down>
+                    <downloss>Packet Loss</downloss>
+                    <downlatency>High Latency</downlatency>
+                    <downlosslatency>Packet Loss and High Latency</downlosslatency>
+                </OptionValues>
+            </trigger>
+            <!-- balance mode: keep one client on one link (sites that check the address do not log out) -->
+            <sticky type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </sticky>
+            <!-- drop open connections of a link that went down, so apps reconnect over the other one at once -->
+            <killstates type="BooleanField">
+                <Default>1</Default>
+                <Required>Y</Required>
+            </killstates>
+            <!-- internal interfaces whose internet traffic is spread over the links -->
+            <lans type="CSVListField">
+                <Default>lan</Default>
+                <Mask>/^[a-z0-9_]{1,32}$/</Mask>
+                <MaskPerItem>Y</MaskPerItem>
+            </lans>
+        </general>
+        <links>
+            <!-- per internet link settings; written to the gateway on apply -->
+            <link type="ArrayField">
+                <gateway type="TextField">
+                    <Required>Y</Required>
+                    <Mask>/^[a-zA-Z0-9_\-]{1,32}$/</Mask>
+                </gateway>
+                <label type="TextField">
+                    <Mask>/^[^\r\n,]{0,40}$/u</Mask>
+                    <ValidationMessage>Name should be up to 40 characters, without commas.</ValidationMessage>
+                </label>
+                <!-- address pinged to check the link; must differ per link -->
+                <monitor type="NetworkField">
+                    <NetMaskAllowed>N</NetMaskAllowed>
+                    <AddressFamily>ipv4</AddressFamily>
+                    <ValidationMessage>Enter an IPv4 address, e.g. 1.1.1.1.</ValidationMessage>
+                </monitor>
+                <weight type="IntegerField">
+                    <Default>1</Default>
+                    <Required>Y</Required>
+                    <MinimumValue>1</MinimumValue>
+                    <MaximumValue>10</MaximumValue>
+                    <ValidationMessage>Weight is 1 to 10.</ValidationMessage>
+                </weight>
+                <!-- tariff speed in Mbit/s, only to show how full the link is -->
+                <speed type="IntegerField">
+                    <MinimumValue>0</MinimumValue>
+                    <MaximumValue>100000</MaximumValue>
+                </speed>
+            </link>
+        </links>
+        <policies>
+            <!-- route some traffic over a chosen link (UniFi "traffic route") -->
+            <policy type="ArrayField">
+                <enabled type="BooleanField">
+                    <Default>1</Default>
+                    <Required>Y</Required>
+                </enabled>
+                <name type="TextField">
+                    <Required>Y</Required>
+                    <Mask>/^[^\r\n,]{1,48}$/u</Mask>
+                    <ValidationMessage>Name should be 1 to 48 characters, without commas.</ValidationMessage>
+                </name>
+                <!-- empty = every device of the selected internal networks -->
+                <source type="CSVListField">
+                    <Mask>/^[0-9]{1,3}(\.[0-9]{1,3}){3}(\/([0-9]|[12][0-9]|3[0-2]))?$/</Mask>
+                    <MaskPerItem>Y</MaskPerItem>
+                    <ValidationMessage>Enter IPv4 addresses or networks, separated by commas.</ValidationMessage>
+                </source>
+                <app type="OptionField">
+                    <Required>Y</Required>
+                    <Default>any</Default>
+                    <OptionValues>
+                        <any>All traffic</any>
+                        <web>Web</web>
+                        <calls>Calls and video conferences</calls>
+                        <gaming>Games</gaming>
+                        <mail>Mail</mail>
+                        <remote>Remote desktop and SSH</remote>
+                        <vpn>VPN</vpn>
+                        <custom>Custom ports</custom>
+                    </OptionValues>
+                </app>
+                <!-- custom app only -->
+                <protocol type="OptionField">
+                    <Required>Y</Required>
+                    <Default>TCP/UDP</Default>
+                    <OptionValues>
+                        <tcpudp value="TCP/UDP">TCP/UDP</tcpudp>
+                        <tcp value="TCP">TCP</tcp>
+                        <udp value="UDP">UDP</udp>
+                    </OptionValues>
+                </protocol>
+                <ports type="CSVListField">
+                    <Mask>/^[0-9]{1,5}([:\-][0-9]{1,5})?$/</Mask>
+                    <MaskPerItem>Y</MaskPerItem>
+                    <ValidationMessage>Enter ports or ranges like 5060, 10000-20000.</ValidationMessage>
+                </ports>
+                <!-- empty = any internet address -->
+                <destination type="CSVListField">
+                    <Mask>/^[0-9]{1,3}(\.[0-9]{1,3}){3}(\/([0-9]|[12][0-9]|3[0-2]))?$/</Mask>
+                    <MaskPerItem>Y</MaskPerItem>
+                    <ValidationMessage>Enter IPv4 addresses or networks, separated by commas.</ValidationMessage>
+                </destination>
+                <wan type="TextField">
+                    <Required>Y</Required>
+                    <Mask>/^[a-zA-Z0-9_\-]{1,32}$/</Mask>
+                    <ValidationMessage>Choose a link.</ValidationMessage>
+                </wan>
+                <!-- 1: use the other links while this one is down; 0: no internet for this traffic then -->
+                <fallback type="BooleanField">
+                    <Default>1</Default>
+                    <Required>Y</Required>
+                </fallback>
+            </policy>
+        </policies>
+    </items>
+</model>
